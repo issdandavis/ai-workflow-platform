@@ -1,0 +1,34 @@
+# Render.com Blueprint - One-click deploy
+# Updated: 2026-01-03 | Supabase Integration Setup
+# https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: ai-workflow-platform
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ai-workflow-db
+          property: connectionString
+      # Add your AI API keys in Render dashboard
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+
+databases:
+  - name: ai-workflow-db
+    plan: free
+    region: oregon
+    databaseName: ai_workflow
+    user: ai_workflow_user

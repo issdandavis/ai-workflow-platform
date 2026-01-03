@@ -1,5 +1,5 @@
 /**
- * API Routes v2.0
+ * API Routes v2.1 - Updated: 2026-01-03 | Supabase Integration Setup
  * 
  * Main API router with all endpoints for authentication, agents, integrations,
  * roundtables, workflows, and more. Includes rate limiting and budget checks.
@@ -81,13 +81,47 @@ export async function registerRoutes(
   // AI Fleet Engine routes - multi-AI parallel collaboration
   app.use("/api/fleet", fleetRoutes);
 
-  // Health endpoint
+  // Health endpoint - for hosting platforms (Render, Railway, etc.)
   app.get("/api/health", (req, res) => {
     res.json({
       status: "ok",
-      time: new Date().toISOString(),
+      timestamp: new Date().toISOString(),
       version: VERSION,
+      uptime: process.uptime(),
     });
+  });
+
+  // Status endpoint - detailed system status
+  app.get("/api/status", async (req, res) => {
+    try {
+      const userCount = await storage.getUserCount();
+      const orgCount = await storage.getOrgCount();
+      
+      res.json({
+        status: "operational",
+        version: VERSION,
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        environment: process.env.NODE_ENV || "development",
+        database: process.env.DATABASE_URL ? "postgresql" : "sqlite",
+        stats: {
+          users: userCount,
+          organizations: orgCount,
+        },
+        features: {
+          fleetEngine: true,
+          autonomyMode: true,
+          roundtable: true,
+          workflows: true,
+          integrations: ["openai", "anthropic", "google", "groq", "perplexity", "xai"],
+        },
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: "error",
+        message: "Failed to get system status",
+      });
+    }
   });
 
   // ===== FIGMA DESIGN PREVIEW ROUTE =====
@@ -2489,7 +2523,7 @@ export async function registerRoutes(
       }).parse(req.body);
 
       const { createStripePrice } = await import("./services/stripeClient");
-      const price = await createStripePrice(productId, unitAmount, currency, recurring);
+      const price = await createStripePrice(productId, unitAmount, currency, recurring as { interval: "month" | "year" } | undefined);
       res.json({ price });
     } catch (error) {
       res.status(400).json({ error: error instanceof Error ? error.message : "Failed to create price" });

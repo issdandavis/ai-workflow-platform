@@ -1,5 +1,5 @@
 /**
- * Database Storage Layer v2.0
+ * Database Storage Layer v2.1 - Updated: 2026-01-03 | Supabase Integration Setup
  * 
  * Unified storage interface for all database operations.
  * Implements IStorage interface for PostgreSQL with Drizzle ORM.
@@ -58,7 +58,10 @@ export interface IStorage {
   // Projects
   getProject(id: string): Promise<Project | undefined>;
   getProjectsByOrg(orgId: string): Promise<Project[]>;
+  getProjects(orgId: string): Promise<Project[]>;
   createProject(project: InsertProject): Promise<Project>;
+  updateProject(id: string, update: Partial<InsertProject>): Promise<Project | undefined>;
+  deleteProject(id: string): Promise<void>;
   
   // Integrations
   getIntegrations(orgId: string): Promise<Integration[]>;
@@ -330,6 +333,23 @@ export class DbStorage implements IStorage {
   async createProject(insertProject: InsertProject): Promise<Project> {
     const [project] = await db.insert(projects).values(insertProject).returning();
     return project;
+  }
+
+  async getProjects(orgId: string): Promise<Project[]> {
+    return this.getProjectsByOrg(orgId);
+  }
+
+  async updateProject(id: string, update: Partial<InsertProject>): Promise<Project | undefined> {
+    const [project] = await db
+      .update(projects)
+      .set(update)
+      .where(eq(projects.id, id))
+      .returning();
+    return project;
+  }
+
+  async deleteProject(id: string): Promise<void> {
+    await db.delete(projects).where(eq(projects.id, id));
   }
 
   // Integrations

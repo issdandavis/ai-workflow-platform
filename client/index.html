@@ -1,3 +1,4 @@
+<!-- Updated: 2026-01-03 | Supabase Integration Setup -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,108 +11,661 @@
         padding: 0;
         box-sizing: border-box;
       }
+
+      :root {
+        --primary: #6366f1;
+        --primary-dark: #4f46e5;
+        --bg-dark: #0f172a;
+        --bg-card: #1e293b;
+        --text: #e2e8f0;
+        --text-muted: #94a3b8;
+        --border: #334155;
+        --success: #22c55e;
+      }
+
       body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
-        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: var(--bg-dark);
+        color: var(--text);
         min-height: 100vh;
+      }
+
+      /* Navigation Sidebar */
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 260px;
+        background: var(--bg-card);
+        border-right: 1px solid var(--border);
+        padding: 1.5rem;
+        overflow-y: auto;
+        z-index: 100;
+      }
+
+      .logo {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 2rem;
         display: flex;
         align-items: center;
-        justify-content: center;
-        color: #e0e0e0;
+        gap: 0.5rem;
       }
-      .container {
-        text-align: center;
-        padding: 3rem;
-        background: rgba(255, 255, 255, 0.05);
+
+      .logo svg {
+        width: 28px;
+        height: 28px;
+      }
+
+      .nav-section {
+        margin-bottom: 1.5rem;
+      }
+
+      .nav-section-title {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 0.75rem;
+        letter-spacing: 0.05em;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        color: var(--text);
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        margin-bottom: 0.25rem;
+      }
+
+      .nav-item:hover {
+        background: rgba(99, 102, 241, 0.1);
+      }
+
+      .nav-item.active {
+        background: var(--primary);
+        color: white;
+      }
+
+      .nav-item svg {
+        width: 20px;
+        height: 20px;
+        opacity: 0.7;
+      }
+
+      .nav-item.active svg {
+        opacity: 1;
+      }
+
+      /* Main Content */
+      .main {
+        margin-left: 260px;
+        min-height: 100vh;
+      }
+
+      /* Header */
+      .header {
+        background: var(--bg-card);
+        border-bottom: 1px solid var(--border);
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+      }
+
+      .header-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+      }
+
+      .header-actions {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+
+      .status-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: rgba(34, 197, 94, 0.1);
+        border: 1px solid rgba(34, 197, 94, 0.3);
         border-radius: 20px;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 0.875rem;
+        color: var(--success);
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        background: var(--success);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+
+      /* Content Area */
+      .content {
+        padding: 0;
+        height: calc(100vh - 65px);
+      }
+
+      /* Gamma Iframe Container */
+      .gamma-frame {
+        width: 100%;
+        height: 100%;
+        border: none;
+        background: white;
+      }
+
+      /* Setup Panel (shown when no Gamma URL configured) */
+      .setup-panel {
         max-width: 600px;
+        margin: 3rem auto;
+        padding: 2rem;
+        background: var(--bg-card);
+        border-radius: 16px;
+        border: 1px solid var(--border);
       }
-      h1 {
-        font-size: 2.5rem;
+
+      .setup-panel h2 {
         margin-bottom: 1rem;
-        background: linear-gradient(90deg, #00d4ff, #7b2ff7);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: var(--primary);
       }
-      .version {
-        color: #888;
-        margin-bottom: 2rem;
+
+      .setup-panel p {
+        color: var(--text-muted);
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
       }
-      .status {
-        background: rgba(0, 212, 255, 0.1);
-        border: 1px solid rgba(0, 212, 255, 0.3);
+
+      .input-group {
+        margin-bottom: 1rem;
+      }
+
+      .input-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background: var(--bg-dark);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text);
+        font-size: 1rem;
+      }
+
+      .input-group input:focus {
+        outline: none;
+        border-color: var(--primary);
+      }
+
+      .btn {
+        padding: 0.75rem 1.5rem;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .btn:hover {
+        background: var(--primary-dark);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--text);
+      }
+
+      .btn-secondary:hover {
+        background: var(--bg-dark);
+      }
+
+      /* Page Config List */
+      .page-list {
+        margin-top: 1.5rem;
+      }
+
+      .page-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         padding: 1rem;
-        border-radius: 10px;
-        margin-bottom: 2rem;
-      }
-      .status-title {
-        color: #00d4ff;
-        font-weight: bold;
+        background: var(--bg-dark);
+        border-radius: 8px;
         margin-bottom: 0.5rem;
       }
-      .api-info {
-        background: rgba(123, 47, 247, 0.1);
-        border: 1px solid rgba(123, 47, 247, 0.3);
+
+      .page-item-name {
+        font-weight: 500;
+      }
+
+      .page-item-url {
+        font-size: 0.875rem;
+        color: var(--text-muted);
+        max-width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .page-item-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .btn-small {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.875rem;
+      }
+
+      /* API Status Panel */
+      .api-panel {
+        position: fixed;
+        bottom: 1rem;
+        right: 1rem;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
         padding: 1rem;
-        border-radius: 10px;
-        text-align: left;
+        width: 300px;
+        z-index: 200;
+        display: none;
       }
-      .api-info h3 {
-        color: #7b2ff7;
-        margin-bottom: 0.5rem;
+
+      .api-panel.visible {
+        display: block;
       }
-      .api-info code {
-        background: rgba(0, 0, 0, 0.3);
-        padding: 0.2rem 0.5rem;
+
+      .api-panel h4 {
+        margin-bottom: 0.75rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .api-endpoint {
+        font-size: 0.8rem;
+        padding: 0.5rem;
+        background: var(--bg-dark);
         border-radius: 4px;
-        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+        font-family: monospace;
       }
-      .api-info ul {
-        list-style: none;
-        margin-top: 0.5rem;
-      }
-      .api-info li {
-        margin: 0.3rem 0;
-      }
-      .notice {
-        margin-top: 2rem;
-        padding: 1rem;
-        background: rgba(255, 193, 7, 0.1);
-        border: 1px solid rgba(255, 193, 7, 0.3);
-        border-radius: 10px;
-        color: #ffc107;
+
+      .close-btn {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        font-size: 1.25rem;
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <h1>AI Workflow Platform</h1>
-      <p class="version">v2.0.0 - Universal Edition</p>
-
-      <div class="status">
-        <div class="status-title">Backend API Running</div>
-        <p>The server is running and accepting API requests.</p>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+        AI Workflow
       </div>
 
-      <div class="api-info">
-        <h3>Available Endpoints:</h3>
-        <ul>
-          <li><code>POST /api/auth/signup</code> - Register</li>
-          <li><code>POST /api/auth/login</code> - Login</li>
-          <li><code>GET /api/projects</code> - List projects</li>
-          <li><code>POST /api/agent/run</code> - Run AI agent</li>
-          <li><code>POST /api/roundtable/sessions</code> - Multi-AI chat</li>
-        </ul>
+      <div class="nav-section">
+        <div class="nav-section-title">Main</div>
+        <div class="nav-item active" data-page="dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"/>
+            <rect x="14" y="3" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/>
+          </svg>
+          Dashboard
+        </div>
+        <div class="nav-item" data-page="projects">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+          </svg>
+          Projects
+        </div>
       </div>
 
-      <div class="notice">
-        <strong>Frontend Not Built</strong><br>
-        This is a placeholder page. A React/Vue frontend needs to be built to use this platform.
-        See ROADMAP.md for next steps.
+      <div class="nav-section">
+        <div class="nav-section-title">AI Tools</div>
+        <div class="nav-item" data-page="chat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          AI Chat
+        </div>
+        <div class="nav-item" data-page="fleet">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+          Fleet Engine
+        </div>
+        <div class="nav-item" data-page="roundtable">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          Roundtable
+        </div>
       </div>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Settings</div>
+        <div class="nav-item" data-page="integrations">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+            <polyline points="15 3 21 3 21 9"/>
+            <line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>
+          Integrations
+        </div>
+        <div class="nav-item" data-page="settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          Settings
+        </div>
+        <div class="nav-item" data-page="setup">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+            <polyline points="2 17 12 22 22 17"/>
+            <polyline points="2 12 12 17 22 12"/>
+          </svg>
+          Page Setup
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+      <header class="header">
+        <h1 class="header-title" id="page-title">Dashboard</h1>
+        <div class="header-actions">
+          <div class="status-badge">
+            <span class="status-dot"></span>
+            API Connected
+          </div>
+          <button class="btn btn-secondary" onclick="toggleApiPanel()">API Info</button>
+        </div>
+      </header>
+
+      <div class="content" id="content">
+        <!-- Content loads here -->
+      </div>
+    </main>
+
+    <!-- API Info Panel -->
+    <div class="api-panel" id="api-panel">
+      <h4>
+        Backend API
+        <button class="close-btn" onclick="toggleApiPanel()">&times;</button>
+      </h4>
+      <div class="api-endpoint">POST /api/auth/login</div>
+      <div class="api-endpoint">GET /api/projects</div>
+      <div class="api-endpoint">POST /api/agent/run</div>
+      <div class="api-endpoint">POST /api/roundtable/sessions</div>
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">
+        Base URL: <code>http://localhost:5000</code>
+      </p>
     </div>
+
+    <script>
+      // Page Configuration - Add your Gamma URLs here
+      const GAMMA_PAGES = {
+        dashboard: {
+          name: "Dashboard",
+          url: "" // Add your Gamma dashboard URL
+        },
+        projects: {
+          name: "Projects",
+          url: "" // Add your Gamma projects URL
+        },
+        chat: {
+          name: "AI Chat",
+          url: "" // Add your Gamma chat URL
+        },
+        fleet: {
+          name: "Fleet Engine",
+          url: "" // Add your Gamma fleet URL
+        },
+        roundtable: {
+          name: "Roundtable",
+          url: "" // Add your Gamma roundtable URL
+        },
+        integrations: {
+          name: "Integrations",
+          url: "" // Add your Gamma integrations URL
+        },
+        settings: {
+          name: "Settings",
+          url: "" // Add your Gamma settings URL
+        }
+      };
+
+      // Load saved pages from localStorage
+      function loadSavedPages() {
+        const saved = localStorage.getItem('gamma_pages');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          Object.assign(GAMMA_PAGES, parsed);
+        }
+      }
+
+      // Save pages to localStorage
+      function savePages() {
+        localStorage.setItem('gamma_pages', JSON.stringify(GAMMA_PAGES));
+      }
+
+      // Navigate to page
+      function navigateTo(pageId) {
+        // Update active nav item
+        document.querySelectorAll('.nav-item').forEach(item => {
+          item.classList.remove('active');
+          if (item.dataset.page === pageId) {
+            item.classList.add('active');
+          }
+        });
+
+        // Update title
+        const pageConfig = GAMMA_PAGES[pageId];
+        document.getElementById('page-title').textContent = pageConfig?.name || pageId;
+
+        // Load content
+        const content = document.getElementById('content');
+
+        if (pageId === 'setup') {
+          showSetupPanel();
+        } else if (pageConfig?.url) {
+          content.innerHTML = `<iframe class="gamma-frame" src="${pageConfig.url}" allowfullscreen></iframe>`;
+        } else {
+          showSetupPrompt(pageId);
+        }
+      }
+
+      // Show setup prompt for unconfigured page
+      function showSetupPrompt(pageId) {
+        const content = document.getElementById('content');
+        content.innerHTML = `
+          <div class="setup-panel">
+            <h2>Configure ${GAMMA_PAGES[pageId]?.name || pageId} Page</h2>
+            <p>This page hasn't been connected to a Gamma URL yet. Enter your Gamma page URL below to connect it.</p>
+            <div class="input-group">
+              <label>Gamma URL</label>
+              <input type="url" id="gamma-url-input" placeholder="https://gamma.app/docs/your-page-id" />
+            </div>
+            <button class="btn" onclick="saveGammaUrl('${pageId}')">Connect Page</button>
+          </div>
+        `;
+      }
+
+      // Show full setup panel
+      function showSetupPanel() {
+        const content = document.getElementById('content');
+        let pageListHtml = '';
+
+        for (const [id, config] of Object.entries(GAMMA_PAGES)) {
+          pageListHtml += `
+            <div class="page-item">
+              <div>
+                <div class="page-item-name">${config.name}</div>
+                <div class="page-item-url">${config.url || 'Not configured'}</div>
+              </div>
+              <div class="page-item-actions">
+                <button class="btn btn-small btn-secondary" onclick="editPage('${id}')">Edit</button>
+              </div>
+            </div>
+          `;
+        }
+
+        content.innerHTML = `
+          <div class="setup-panel" style="max-width: 800px;">
+            <h2>Page Setup</h2>
+            <p>Connect your Gamma pages to each section of the app. Each page will be displayed in an iframe when users navigate to that section.</p>
+
+            <div class="page-list">
+              ${pageListHtml}
+            </div>
+
+            <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+              <h3 style="margin-bottom: 1rem;">Add New Page</h3>
+              <div class="input-group">
+                <label>Page ID (lowercase, no spaces)</label>
+                <input type="text" id="new-page-id" placeholder="my-page" />
+              </div>
+              <div class="input-group">
+                <label>Page Name</label>
+                <input type="text" id="new-page-name" placeholder="My Page" />
+              </div>
+              <div class="input-group">
+                <label>Gamma URL</label>
+                <input type="url" id="new-page-url" placeholder="https://gamma.app/docs/..." />
+              </div>
+              <button class="btn" onclick="addNewPage()">Add Page</button>
+            </div>
+          </div>
+        `;
+      }
+
+      // Save Gamma URL for a page
+      function saveGammaUrl(pageId) {
+        const url = document.getElementById('gamma-url-input').value;
+        if (url) {
+          GAMMA_PAGES[pageId].url = url;
+          savePages();
+          navigateTo(pageId);
+        }
+      }
+
+      // Edit page URL
+      function editPage(pageId) {
+        const newUrl = prompt(`Enter Gamma URL for ${GAMMA_PAGES[pageId].name}:`, GAMMA_PAGES[pageId].url || '');
+        if (newUrl !== null) {
+          GAMMA_PAGES[pageId].url = newUrl;
+          savePages();
+          showSetupPanel();
+        }
+      }
+
+      // Add new page
+      function addNewPage() {
+        const id = document.getElementById('new-page-id').value.toLowerCase().replace(/\s/g, '-');
+        const name = document.getElementById('new-page-name').value;
+        const url = document.getElementById('new-page-url').value;
+
+        if (id && name) {
+          GAMMA_PAGES[id] = { name, url };
+          savePages();
+
+          // Add to nav
+          const navSection = document.querySelector('.nav-section:last-child');
+          const newNavItem = document.createElement('div');
+          newNavItem.className = 'nav-item';
+          newNavItem.dataset.page = id;
+          newNavItem.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            </svg>
+            ${name}
+          `;
+          newNavItem.addEventListener('click', () => navigateTo(id));
+          navSection.appendChild(newNavItem);
+
+          showSetupPanel();
+        }
+      }
+
+      // Toggle API panel
+      function toggleApiPanel() {
+        document.getElementById('api-panel').classList.toggle('visible');
+      }
+
+      // API helper for Gamma pages to call backend
+      window.AIWorkflowAPI = {
+        baseUrl: window.location.origin,
+
+        async call(endpoint, method = 'GET', data = null) {
+          const options = {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include'
+          };
+          if (data) options.body = JSON.stringify(data);
+
+          const response = await fetch(this.baseUrl + endpoint, options);
+          return response.json();
+        },
+
+        // Convenience methods
+        async getProjects() { return this.call('/api/projects'); },
+        async createProject(data) { return this.call('/api/projects', 'POST', data); },
+        async runAgent(data) { return this.call('/api/agent/run', 'POST', data); },
+        async login(email, password) { return this.call('/api/auth/login', 'POST', { email, password }); },
+        async signup(email, password) { return this.call('/api/auth/signup', 'POST', { email, password }); }
+      };
+
+      // Initialize
+      loadSavedPages();
+
+      // Set up navigation
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', () => navigateTo(item.dataset.page));
+      });
+
+      // Load initial page
+      navigateTo('dashboard');
+    </script>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

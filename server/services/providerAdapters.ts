@@ -1,5 +1,5 @@
 /**
- * Provider Adapters v2.0
+ * Provider Adapters v2.1 - Updated: 2026-01-03 | Supabase Integration Setup
  * 
  * Unified interface for all AI providers with automatic fallback and demo mode.
  * Handles OpenAI, Anthropic, Google, xAI, Perplexity, Groq, HuggingFace, and Ollama.
@@ -25,6 +25,7 @@ export interface ProviderResponse {
 export interface ProviderAdapter {
   name: string;
   call(prompt: string, model: string): Promise<ProviderResponse>;
+  chat(messages: { role: string; content: string }[], model?: string): Promise<ProviderResponse>;
 }
 
 // Helper to detect invalid/placeholder API keys
@@ -91,6 +92,12 @@ class BaseProviderAdapter implements ProviderAdapter {
         costEstimate: "0.0001",
       },
     };
+  }
+
+  async chat(messages: { role: string; content: string }[], model?: string): Promise<ProviderResponse> {
+    // Default implementation: convert messages to single prompt and call
+    const prompt = messages.map(m => `${m.role}: ${m.content}`).join('\n');
+    return this.call(prompt, model || 'default');
   }
 }
 
