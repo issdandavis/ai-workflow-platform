@@ -111,11 +111,4 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
   return res.status(401).json({ message: "Unauthorized" });
 };
 
-// Extend Express session types
-declare module "express-session" {
-  interface SessionData {
-    userId: string;
-    orgId: string;
-    isGuest?: boolean;
-  }
-}
+// Note: Session types are defined in auth.ts to avoid duplicate declarations

@@ -1427,7 +1427,7 @@ export async function registerRoutes(
         userId: req.session.userId || null,
         action: "zapier_mcp_tool_call",
         target: tool,
-        detailJson: { args, isError: result.isError },
+        detailJson: { args, isError: result.isError } as any,
       });
 
       res.json(result);
@@ -1459,7 +1459,7 @@ export async function registerRoutes(
         targetUrl,
         isActive: true,
         secretKey,
-        metadata: metadata || null,
+        metadata: (metadata || null) as any,
       });
 
       await storage.createAuditLog({
@@ -1686,7 +1686,7 @@ export async function registerRoutes(
         status: "active",
         orchestrationMode,
         maxTurns,
-        activeProviders: providers,
+        activeProviders: providers as any,
         createdBy: org.ownerUserId,
       });
 
@@ -2869,7 +2869,7 @@ export async function registerRoutes(
         projectId: projectId || null,
         title,
         topic: topic || null,
-        activeProviders,
+        activeProviders: activeProviders as any,
         orchestrationMode,
         maxTurns,
         status: "active",
@@ -4030,7 +4030,7 @@ Format your response as JSON with the following structure:
         return res.status(409).json({ error: "Profile already exists" });
       }
       const validated = profileUpdateSchema.parse(req.body);
-      const profile = await storage.createUserProfile({ userId, ...validated });
+      const profile = await storage.createUserProfile({ userId, ...validated } as any);
       res.json({ profile });
     } catch (error) {
       res.status(400).json({ error: error instanceof Error ? error.message : "Failed to create profile" });
@@ -4046,9 +4046,9 @@ Format your response as JSON with the following structure:
       const validated = profileUpdateSchema.parse(req.body);
       let profile = await storage.getUserProfile(userId);
       if (!profile) {
-        profile = await storage.createUserProfile({ userId, ...validated });
+        profile = await storage.createUserProfile({ userId, ...validated } as any);
       } else {
-        profile = await storage.updateUserProfile(userId, validated);
+        profile = await storage.updateUserProfile(userId, validated as any);
       }
       res.json({ profile });
     } catch (error) {

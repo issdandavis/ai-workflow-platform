@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Workflow Platform</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #e0e0e0;
+      }
+      .container {
+        text-align: center;
+        padding: 3rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        max-width: 600px;
+      }
+      h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(90deg, #00d4ff, #7b2ff7);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .version {
+        color: #888;
+        margin-bottom: 2rem;
+      }
+      .status {
+        background: rgba(0, 212, 255, 0.1);
+        border: 1px solid rgba(0, 212, 255, 0.3);
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+      }
+      .status-title {
+        color: #00d4ff;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+      }
+      .api-info {
+        background: rgba(123, 47, 247, 0.1);
+        border: 1px solid rgba(123, 47, 247, 0.3);
+        padding: 1rem;
+        border-radius: 10px;
+        text-align: left;
+      }
+      .api-info h3 {
+        color: #7b2ff7;
+        margin-bottom: 0.5rem;
+      }
+      .api-info code {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.9rem;
+      }
+      .api-info ul {
+        list-style: none;
+        margin-top: 0.5rem;
+      }
+      .api-info li {
+        margin: 0.3rem 0;
+      }
+      .notice {
+        margin-top: 2rem;
+        padding: 1rem;
+        background: rgba(255, 193, 7, 0.1);
+        border: 1px solid rgba(255, 193, 7, 0.3);
+        border-radius: 10px;
+        color: #ffc107;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>AI Workflow Platform</h1>
+      <p class="version">v2.0.0 - Universal Edition</p>
+
+      <div class="status">
+        <div class="status-title">Backend API Running</div>
+        <p>The server is running and accepting API requests.</p>
+      </div>
+
+      <div class="api-info">
+        <h3>Available Endpoints:</h3>
+        <ul>
+          <li><code>POST /api/auth/signup</code> - Register</li>
+          <li><code>POST /api/auth/login</code> - Login</li>
+          <li><code>GET /api/projects</code> - List projects</li>
+          <li><code>POST /api/agent/run</code> - Run AI agent</li>
+          <li><code>POST /api/roundtable/sessions</code> - Multi-AI chat</li>
+        </ul>
+      </div>
+
+      <div class="notice">
+        <strong>Frontend Not Built</strong><br>
+        This is a placeholder page. A React/Vue frontend needs to be built to use this platform.
+        See ROADMAP.md for next steps.
+      </div>
+    </div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

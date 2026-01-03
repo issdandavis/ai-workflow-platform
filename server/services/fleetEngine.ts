@@ -299,7 +299,7 @@ RESPOND WITH A JSON OBJECT:
     
     // Parse captain's plan
     try {
-      const planMatch = response.content.match(/\{[\s\S]*\}/);
+      const planMatch = (response.content || "").match(/\{[\s\S]*\}/);
       if (!planMatch) throw new Error("No valid JSON in response");
       
       const plan = JSON.parse(planMatch[0]);
@@ -455,7 +455,7 @@ RESPOND WITH A JSON OBJECT:
       }
       
       // Process the response based on task type
-      const result = await this.processTaskResult(mission, task, crewMember, response.content);
+      const result = await this.processTaskResult(mission, task, crewMember, response.content || "");
       
       task.output = result;
       task.status = "completed";
@@ -855,6 +855,3 @@ Provide a brief executive summary (2-3 paragraphs) of what was accomplished.`;
 
 // Export singleton instance
 export const fleetEngine = new FleetEngine();
-
-// Export types for use in routes
-export type { FleetMission, FleetTask, CrewMember, SharedCodespace, CodeFile, ConlangDefinition };
