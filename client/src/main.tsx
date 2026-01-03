@@ -1,20 +1,12 @@
 /**
- * Frontend Entry Point
- *
- * This is a placeholder. A full React application needs to be built here.
+ * AI Workflow Platform - Frontend Entry Point
+ * Updated: 2026-01-03 | Full React Frontend Build
  */
 
 import React from "react";
 import ReactDOM from "react-dom/client";
-
-function App() {
-  return (
-    <div style={{ padding: "2rem", textAlign: "center" }}>
-      <h1>AI Workflow Platform</h1>
-      <p>Frontend placeholder - build your React app here</p>
-    </div>
-  );
-}
+import App from "./App";
+import "./index.css";
 
 const root = document.getElementById("root");
 if (root) {
