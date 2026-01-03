@@ -1,0 +1,60 @@
+{
+  "name": "ai-workflow-platform",
+  "version": "2.0.0",
+  "description": "AI Workflow Platform - Multi-AI orchestration with Fleet Engine, Extension Manager, and Self-Improvement capabilities",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch server/index.ts",
+    "build": "tsc && vite build",
+    "start": "node dist/server/index.js",
+    "test": "vitest",
+    "check": "tsc --noEmit",
+    "db:push": "drizzle-kit push"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
+    "@google/generative-ai": "^0.21.0",
+    "@neondatabase/serverless": "^0.10.4",
+    "@supabase/supabase-js": "^2.47.10",
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^11.7.0",
+    "connect-pg-simple": "^10.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.38.3",
+    "drizzle-zod": "^0.5.1",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "express-session": "^1.18.1",
+    "groq-sdk": "^0.8.0",
+    "memorystore": "^1.6.7",
+    "openai": "^4.77.0",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "pg": "^8.13.1",
+    "stripe": "^17.5.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/connect-pg-simple": "^7.0.3",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/express-session": "^1.18.1",
+    "@types/node": "^22.10.5",
+    "@types/passport": "^1.0.17",
+    "@types/passport-local": "^1.0.38",
+    "@types/pg": "^8.11.10",
+    "@vitejs/plugin-react": "^4.3.4",
+    "drizzle-kit": "^0.30.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.7",
+    "vite-tsconfig-paths": "^6.0.3",
+    "vitest": "^2.1.8"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
