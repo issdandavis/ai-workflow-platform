@@ -4,6 +4,8 @@ node_modules
 .env.production
 .env.*.local
 .kiro
+.ai-notes
+.claude
 dist
 *.log
 .DS_Store
