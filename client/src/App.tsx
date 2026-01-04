@@ -5,9 +5,12 @@
 import React, { useState, useCallback } from "react";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { ToastProvider } from "./contexts/ToastContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import { Sidebar } from "./components/Sidebar";
 import { Header } from "./components/Header";
+import { MobileSidebar } from "./components/layout/MobileSidebar";
 import { ToastContainer } from "./components/ui/Toast";
+import { SkipLink } from "./components/ui/SkipLink";
 import { LoginPage } from "./pages/LoginPage";
 import { Dashboard } from "./pages/Dashboard";
 import { ProjectsPage } from "./pages/ProjectsPage";
@@ -30,6 +33,7 @@ function AppContent() {
   const { user, loading } = useAuth();
   const [currentPage, setCurrentPage] = useState<Page>("dashboard");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [pendingModal, setPendingModal] = useState<NavigateOptions | null>(null);
 
   const navigate: NavigateFn = useCallback((page: Page, options?: NavigateOptions) => {
@@ -71,15 +75,25 @@ function AppContent() {
 
   return (
     <div className="app-layout">
+      <SkipLink targetId="main-content" />
       <Sidebar 
         currentPage={currentPage} 
         onNavigate={(page) => navigate(page)}
         collapsed={sidebarCollapsed}
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
       />
+      <MobileSidebar
+        isOpen={mobileSidebarOpen}
+        onClose={() => setMobileSidebarOpen(false)}
+        currentPage={currentPage}
+        onNavigate={(page) => navigate(page)}
+      />
       <main className={`main-content ${sidebarCollapsed ? "sidebar-collapsed" : ""}`}>
-        <Header currentPage={currentPage} />
-        <div className="page-content">
+        <Header 
+          currentPage={currentPage} 
+          onMobileMenuToggle={() => setMobileSidebarOpen(true)}
+        />
+        <div id="main-content" className="page-content" tabIndex={-1}>
           {renderPage()}
         </div>
       </main>
@@ -119,11 +133,13 @@ function AppContent() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <ToastProvider>
-        <AppContent />
-        <ToastContainer />
-      </ToastProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <ToastProvider>
+          <AppContent />
+          <ToastContainer />
+        </ToastProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }

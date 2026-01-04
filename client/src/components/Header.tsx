@@ -4,11 +4,13 @@
 
 import React, { useState, useEffect } from "react";
 import { system } from "../lib/api";
+import { ThemeToggle } from "./ui/ThemeToggle";
 
 type Page = "dashboard" | "projects" | "chat" | "fleet" | "roundtable" | "settings" | "integrations";
 
 interface HeaderProps {
   currentPage: Page;
+  onMobileMenuToggle?: () => void;
 }
 
 const pageTitles: Record<Page, string> = {
@@ -21,7 +23,15 @@ const pageTitles: Record<Page, string> = {
   integrations: "Integrations",
 };
 
-export function Header({ currentPage }: HeaderProps) {
+const menuIcon = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <line x1="3" y1="12" x2="21" y2="12" />
+    <line x1="3" y1="6" x2="21" y2="6" />
+    <line x1="3" y1="18" x2="21" y2="18" />
+  </svg>
+);
+
+export function Header({ currentPage, onMobileMenuToggle }: HeaderProps) {
   const [apiStatus, setApiStatus] = useState<"connected" | "disconnected" | "checking">("checking");
 
   useEffect(() => {
@@ -41,12 +51,24 @@ export function Header({ currentPage }: HeaderProps) {
 
   return (
     <header className="header">
-      <h1 className="header-title">{pageTitles[currentPage]}</h1>
+      <div className="header-left">
+        {onMobileMenuToggle && (
+          <button 
+            className="mobile-menu-btn" 
+            onClick={onMobileMenuToggle}
+            aria-label="Open navigation menu"
+          >
+            {menuIcon}
+          </button>
+        )}
+        <h1 className="header-title">{pageTitles[currentPage]}</h1>
+      </div>
       <div className="header-actions">
         <div className={`status-badge ${apiStatus}`}>
-          <span className={`status-dot status-dot-${apiStatus === "connected" ? "success" : apiStatus === "disconnected" ? "error" : "warning"} ${apiStatus === "checking" ? "" : "status-dot-pulse"}`} />
+          <span className={`status-dot status-dot-${apiStatus === "connected" ? "success" : apiStatus === "disconnected" ? "error" : "warning"} ${apiStatus === "checking" ? "" : "status-dot-pulse"}`} aria-hidden="true" />
           <span>{apiStatus === "connected" ? "API Connected" : apiStatus === "disconnected" ? "API Offline" : "Checking..."}</span>
         </div>
+        <ThemeToggle />
       </div>
 
       <style>{`
@@ -61,9 +83,38 @@ export function Header({ currentPage }: HeaderProps) {
           top: 0;
           z-index: 50;
         }
+        .header-left {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+        }
         .header-title {
           font-size: 1.25rem;
           font-weight: 600;
+        }
+        .mobile-menu-btn {
+          display: none;
+          width: 44px;
+          height: 44px;
+          background: none;
+          border: 1px solid var(--border);
+          border-radius: 0.5rem;
+          color: var(--text-muted);
+          cursor: pointer;
+          align-items: center;
+          justify-content: center;
+        }
+        .mobile-menu-btn:hover, .mobile-menu-btn:focus {
+          background: var(--bg-hover);
+          color: var(--text);
+        }
+        .mobile-menu-btn:focus {
+          outline: 2px solid var(--primary);
+          outline-offset: 2px;
+        }
+        .mobile-menu-btn svg {
+          width: 24px;
+          height: 24px;
         }
         .header-actions {
           display: flex;
@@ -93,6 +144,17 @@ export function Header({ currentPage }: HeaderProps) {
           background: rgba(245, 158, 11, 0.1);
           border: 1px solid rgba(245, 158, 11, 0.3);
           color: var(--warning);
+        }
+        @media (max-width: 768px) {
+          .mobile-menu-btn {
+            display: flex;
+          }
+          .status-badge span:last-child {
+            display: none;
+          }
+          .status-badge {
+            padding: 0.5rem;
+          }
         }
       `}</style>
     </header>

@@ -1,7 +1,8 @@
 /* AI Workflow Platform - Global Styles */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-:root {
+/* Dark Theme (default) */
+:root, [data-theme="dark"] {
   --primary: #6366f1;
   --primary-hover: #4f46e5;
   --primary-light: rgba(99, 102, 241, 0.1);
@@ -16,6 +17,24 @@
   --warning: #f59e0b;
   --error: #ef4444;
   --info: #3b82f6;
+}
+
+/* Light Theme */
+[data-theme="light"] {
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --primary-light: rgba(79, 70, 229, 0.08);
+  --bg-dark: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-hover: #f1f5f9;
+  --text: #1e293b;
+  --text-muted: #64748b;
+  --text-dim: #94a3b8;
+  --border: #e2e8f0;
+  --success: #16a34a;
+  --warning: #d97706;
+  --error: #dc2626;
+  --info: #2563eb;
 }
 
 * {
@@ -272,4 +291,89 @@ body {
 
 .status-dot-pulse {
   animation: pulse 2s ease-in-out infinite;
+}
+
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .page-content {
+    padding: 1rem !important;
+  }
+  
+  .card {
+    padding: 1rem;
+  }
+  
+  .btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .input, .textarea {
+    min-height: 44px;
+    font-size: 16px; /* Prevents iOS zoom */
+  }
+  
+  /* Stack grid layouts on mobile */
+  .stats-grid, .quick-actions-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Full-width modals on mobile */
+  .modal-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    border-radius: 1rem 1rem 0 0 !important;
+    max-height: 90vh !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-content {
+    padding: 0.75rem !important;
+  }
+  
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+}
+
+/* Focus visible styles for accessibility */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+button:focus:not(:focus-visible),
+a:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root, [data-theme="dark"] {
+    --border: #64748b;
+    --text-muted: #cbd5e1;
+  }
+  
+  [data-theme="light"] {
+    --border: #475569;
+    --text-muted: #475569;
+  }
 }
