@@ -4,6 +4,8 @@
 
 import React, { useState, useEffect } from "react";
 import { fleet } from "../lib/api";
+import { useToast } from "../contexts/ToastContext";
+import type { NavigateFn, NavigateOptions } from "../App";
 
 interface Mission {
   id: string;
@@ -14,7 +16,14 @@ interface Mission {
   createdAt: string;
 }
 
-export function FleetPage() {
+interface FleetPageProps {
+  onNavigate: NavigateFn;
+  pendingModal: NavigateOptions | null;
+  onModalHandled: () => void;
+}
+
+export function FleetPage({ onNavigate, pendingModal, onModalHandled }: FleetPageProps) {
+  const { showToast } = useToast();
   const [missions, setMissions] = useState<Mission[]>([]);
   const [fleetStatus, setFleetStatus] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -29,6 +38,14 @@ export function FleetPage() {
     loadFleetData();
   }, []);
 
+  // Handle pending modal from navigation
+  useEffect(() => {
+    if (pendingModal?.openModal === "create") {
+      setShowCreate(true);
+      onModalHandled();
+    }
+  }, [pendingModal, onModalHandled]);
+
   const loadFleetData = async () => {
     try {
       const [statusData, missionsData] = await Promise.all([
@@ -39,6 +56,7 @@ export function FleetPage() {
       setMissions(missionsData);
     } catch (err) {
       console.error("Failed to load fleet data:", err);
+      showToast("error", "Failed to load fleet data");
     } finally {
       setLoading(false);
     }
@@ -50,9 +68,11 @@ export function FleetPage() {
       await fleet.createMission(newMission);
       setShowCreate(false);
       setNewMission({ name: "", goal: "", agents: ["openai", "anthropic"] });
+      showToast("success", "Mission launched!");
       loadFleetData();
     } catch (err) {
       console.error("Failed to create mission:", err);
+      showToast("error", "Failed to launch mission");
     }
   };
 

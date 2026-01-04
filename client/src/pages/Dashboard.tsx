@@ -4,6 +4,7 @@
 
 import React, { useState, useEffect } from "react";
 import { dashboard, ai, audit } from "../lib/api";
+import type { NavigateFn } from "../App";
 
 interface Stats {
   usage: { totalTokens: number; totalCostUsd: number; periodDays: number };
@@ -11,7 +12,11 @@ interface Stats {
   roundtables: { total: number; active: number };
 }
 
-export function Dashboard() {
+interface DashboardProps {
+  onNavigate: NavigateFn;
+}
+
+export function Dashboard({ onNavigate }: DashboardProps) {
   const [stats, setStats] = useState<Stats | null>(null);
   const [providers, setProviders] = useState<any[]>([]);
   const [recentActivity, setRecentActivity] = useState<any[]>([]);
@@ -161,20 +166,20 @@ export function Dashboard() {
       <div className="card quick-actions">
         <h3 className="card-title">Quick Actions</h3>
         <div className="actions-grid">
-          <button className="action-btn">
+          <button className="action-btn" onClick={() => onNavigate("chat")}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
             </svg>
             <span>Start AI Chat</span>
           </button>
-          <button className="action-btn">
+          <button className="action-btn" onClick={() => onNavigate("fleet", { openModal: "create" })}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <rect x="4" y="4" width="16" height="16" rx="2" />
               <rect x="9" y="9" width="6" height="6" />
             </svg>
             <span>Launch Fleet Mission</span>
           </button>
-          <button className="action-btn">
+          <button className="action-btn" onClick={() => onNavigate("roundtable", { openModal: "create" })}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
               <circle cx="9" cy="7" r="4" />
@@ -183,7 +188,7 @@ export function Dashboard() {
             </svg>
             <span>Create Roundtable</span>
           </button>
-          <button className="action-btn">
+          <button className="action-btn" onClick={() => onNavigate("projects", { openModal: "create" })}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
               <line x1="12" y1="11" x2="12" y2="17" />

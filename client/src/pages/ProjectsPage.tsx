@@ -4,8 +4,17 @@
 
 import React, { useState, useEffect } from "react";
 import { projects } from "../lib/api";
+import { useToast } from "../contexts/ToastContext";
+import type { NavigateFn, NavigateOptions } from "../App";
 
-export function ProjectsPage() {
+interface ProjectsPageProps {
+  onNavigate: NavigateFn;
+  pendingModal: NavigateOptions | null;
+  onModalHandled: () => void;
+}
+
+export function ProjectsPage({ onNavigate, pendingModal, onModalHandled }: ProjectsPageProps) {
+  const { showToast } = useToast();
   const [projectList, setProjectList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
@@ -16,12 +25,21 @@ export function ProjectsPage() {
     loadProjects();
   }, []);
 
+  // Handle pending modal from navigation
+  useEffect(() => {
+    if (pendingModal?.openModal === "create") {
+      setShowCreate(true);
+      onModalHandled();
+    }
+  }, [pendingModal, onModalHandled]);
+
   const loadProjects = async () => {
     try {
       const data = await projects.list();
       setProjectList(data);
     } catch (err) {
       console.error("Failed to load projects:", err);
+      showToast("error", "Failed to load projects");
     } finally {
       setLoading(false);
     }
@@ -36,9 +54,11 @@ export function ProjectsPage() {
       await projects.create(newProject);
       setNewProject({ name: "", description: "" });
       setShowCreate(false);
+      showToast("success", "Project created successfully!");
       loadProjects();
     } catch (err) {
       console.error("Failed to create project:", err);
+      showToast("error", "Failed to create project");
     } finally {
       setCreating(false);
     }
@@ -48,9 +68,11 @@ export function ProjectsPage() {
     if (!confirm("Are you sure you want to delete this project?")) return;
     try {
       await projects.delete(id);
+      showToast("success", "Project deleted");
       loadProjects();
     } catch (err) {
       console.error("Failed to delete project:", err);
+      showToast("error", "Failed to delete project");
     }
   };
 

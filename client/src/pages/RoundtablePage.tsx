@@ -4,6 +4,8 @@
 
 import React, { useState, useEffect } from "react";
 import { roundtable } from "../lib/api";
+import { useToast } from "../contexts/ToastContext";
+import type { NavigateFn, NavigateOptions } from "../App";
 
 interface Session {
   id: string;
@@ -14,7 +16,14 @@ interface Session {
   createdAt: string;
 }
 
-export function RoundtablePage() {
+interface RoundtablePageProps {
+  onNavigate: NavigateFn;
+  pendingModal: NavigateOptions | null;
+  onModalHandled: () => void;
+}
+
+export function RoundtablePage({ onNavigate, pendingModal, onModalHandled }: RoundtablePageProps) {
+  const { showToast } = useToast();
   const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
@@ -35,12 +44,21 @@ export function RoundtablePage() {
     loadSessions();
   }, []);
 
+  // Handle pending modal from navigation
+  useEffect(() => {
+    if (pendingModal?.openModal === "create") {
+      setShowCreate(true);
+      onModalHandled();
+    }
+  }, [pendingModal, onModalHandled]);
+
   const loadSessions = async () => {
     try {
       const data = await roundtable.getSessions();
       setSessions(data);
     } catch (err) {
       console.error("Failed to load sessions:", err);
+      showToast("error", "Failed to load sessions");
     } finally {
       setLoading(false);
     }
@@ -54,9 +72,11 @@ export function RoundtablePage() {
       await roundtable.createSession(newSession);
       setShowCreate(false);
       setNewSession({ topic: "", participants: ["openai", "anthropic"] });
+      showToast("success", "Roundtable started!");
       loadSessions();
     } catch (err) {
       console.error("Failed to create session:", err);
+      showToast("error", "Failed to start roundtable");
     }
   };
 

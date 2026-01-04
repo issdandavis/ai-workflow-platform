@@ -2,10 +2,12 @@
  * AI Workflow Platform - Main App Component
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { ToastProvider } from "./contexts/ToastContext";
 import { Sidebar } from "./components/Sidebar";
 import { Header } from "./components/Header";
+import { ToastContainer } from "./components/ui/Toast";
 import { LoginPage } from "./pages/LoginPage";
 import { Dashboard } from "./pages/Dashboard";
 import { ProjectsPage } from "./pages/ProjectsPage";
@@ -15,12 +17,31 @@ import { RoundtablePage } from "./pages/RoundtablePage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { IntegrationsPage } from "./pages/IntegrationsPage";
 
-type Page = "dashboard" | "projects" | "chat" | "fleet" | "roundtable" | "settings" | "integrations";
+export type Page = "dashboard" | "projects" | "chat" | "fleet" | "roundtable" | "settings" | "integrations";
+
+export interface NavigateOptions {
+  openModal?: "create" | "detail";
+  id?: string;
+}
+
+export type NavigateFn = (page: Page, options?: NavigateOptions) => void;
 
 function AppContent() {
   const { user, loading } = useAuth();
   const [currentPage, setCurrentPage] = useState<Page>("dashboard");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [pendingModal, setPendingModal] = useState<NavigateOptions | null>(null);
+
+  const navigate: NavigateFn = useCallback((page: Page, options?: NavigateOptions) => {
+    setCurrentPage(page);
+    if (options) {
+      setPendingModal(options);
+    }
+  }, []);
+
+  const clearPendingModal = useCallback(() => {
+    setPendingModal(null);
+  }, []);
 
   if (loading) {
     return (
@@ -37,14 +58,14 @@ function AppContent() {
 
   const renderPage = () => {
     switch (currentPage) {
-      case "dashboard": return <Dashboard />;
-      case "projects": return <ProjectsPage />;
+      case "dashboard": return <Dashboard onNavigate={navigate} />;
+      case "projects": return <ProjectsPage onNavigate={navigate} pendingModal={pendingModal} onModalHandled={clearPendingModal} />;
       case "chat": return <ChatPage />;
-      case "fleet": return <FleetPage />;
-      case "roundtable": return <RoundtablePage />;
+      case "fleet": return <FleetPage onNavigate={navigate} pendingModal={pendingModal} onModalHandled={clearPendingModal} />;
+      case "roundtable": return <RoundtablePage onNavigate={navigate} pendingModal={pendingModal} onModalHandled={clearPendingModal} />;
       case "settings": return <SettingsPage />;
       case "integrations": return <IntegrationsPage />;
-      default: return <Dashboard />;
+      default: return <Dashboard onNavigate={navigate} />;
     }
   };
 
@@ -52,7 +73,7 @@ function AppContent() {
     <div className="app-layout">
       <Sidebar 
         currentPage={currentPage} 
-        onNavigate={setCurrentPage}
+        onNavigate={(page) => navigate(page)}
         collapsed={sidebarCollapsed}
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
       />
@@ -99,7 +120,10 @@ function AppContent() {
 export default function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <ToastProvider>
+        <AppContent />
+        <ToastContainer />
+      </ToastProvider>
     </AuthProvider>
   );
 }
