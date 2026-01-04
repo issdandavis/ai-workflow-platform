@@ -5,6 +5,7 @@
 import React, { useState, useEffect } from "react";
 import { roundtable } from "../lib/api";
 import { useToast } from "../contexts/ToastContext";
+import { RoundtableSession } from "../components/features/RoundtableSession";
 import type { NavigateFn, NavigateOptions } from "../App";
 
 interface Session {
@@ -27,6 +28,7 @@ export function RoundtablePage({ onNavigate, pendingModal, onModalHandled }: Rou
   const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
+  const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
   const [newSession, setNewSession] = useState({
     topic: "",
     participants: ["openai", "anthropic"],
@@ -154,7 +156,14 @@ export function RoundtablePage({ onNavigate, pendingModal, onModalHandled }: Rou
         ) : (
           <div className="sessions-list">
             {sessions.map((session) => (
-              <div key={session.id} className="session-item">
+              <div 
+                key={session.id} 
+                className="session-item"
+                onClick={() => setSelectedSessionId(session.id)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === "Enter" && setSelectedSessionId(session.id)}
+              >
                 <div className="session-main">
                   <h4 className="session-topic">{session.topic}</h4>
                   <div className="session-participants">
@@ -183,6 +192,15 @@ export function RoundtablePage({ onNavigate, pendingModal, onModalHandled }: Rou
           </div>
         )}
       </div>
+
+      {/* Session Detail Modal */}
+      {selectedSessionId && (
+        <RoundtableSession
+          sessionId={selectedSessionId}
+          onClose={() => setSelectedSessionId(null)}
+          onUpdate={loadSessions}
+        />
+      )}
 
       {/* Create Modal */}
       {showCreate && (

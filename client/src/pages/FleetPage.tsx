@@ -5,6 +5,7 @@
 import React, { useState, useEffect } from "react";
 import { fleet } from "../lib/api";
 import { useToast } from "../contexts/ToastContext";
+import { MissionDetail } from "../components/features/MissionDetail";
 import type { NavigateFn, NavigateOptions } from "../App";
 
 interface Mission {
@@ -28,6 +29,7 @@ export function FleetPage({ onNavigate, pendingModal, onModalHandled }: FleetPag
   const [fleetStatus, setFleetStatus] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
+  const [selectedMissionId, setSelectedMissionId] = useState<string | null>(null);
   const [newMission, setNewMission] = useState({
     name: "",
     goal: "",
@@ -176,7 +178,14 @@ export function FleetPage({ onNavigate, pendingModal, onModalHandled }: FleetPag
         ) : (
           <div className="missions-list">
             {missions.map((mission) => (
-              <div key={mission.id} className="mission-item">
+              <div 
+                key={mission.id} 
+                className="mission-item"
+                onClick={() => setSelectedMissionId(mission.id)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === "Enter" && setSelectedMissionId(mission.id)}
+              >
                 <div className="mission-info">
                   <h4 className="mission-name">{mission.name}</h4>
                   <div className="mission-agents">
@@ -200,6 +209,15 @@ export function FleetPage({ onNavigate, pendingModal, onModalHandled }: FleetPag
           </div>
         )}
       </div>
+
+      {/* Mission Detail Modal */}
+      {selectedMissionId && (
+        <MissionDetail
+          missionId={selectedMissionId}
+          onClose={() => setSelectedMissionId(null)}
+          onUpdate={loadFleetData}
+        />
+      )}
 
       {/* Create Mission Modal */}
       {showCreate && (
@@ -368,6 +386,16 @@ export function FleetPage({ onNavigate, pendingModal, onModalHandled }: FleetPag
           padding: 1rem;
           background: var(--bg-dark);
           border-radius: 0.5rem;
+          cursor: pointer;
+          transition: background 0.2s, transform 0.2s;
+        }
+        .mission-item:hover {
+          background: var(--bg-hover);
+          transform: translateX(4px);
+        }
+        .mission-item:focus {
+          outline: 2px solid var(--primary);
+          outline-offset: 2px;
         }
         .mission-name {
           font-weight: 500;
