@@ -5,6 +5,7 @@
 import React, { useState, useEffect } from "react";
 import { projects } from "../lib/api";
 import { useToast } from "../contexts/ToastContext";
+import { ProjectDetail } from "../components/features/ProjectDetail";
 import type { NavigateFn, NavigateOptions } from "../App";
 
 interface ProjectsPageProps {
@@ -18,6 +19,7 @@ export function ProjectsPage({ onNavigate, pendingModal, onModalHandled }: Proje
   const [projectList, setProjectList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [newProject, setNewProject] = useState({ name: "", description: "" });
   const [creating, setCreating] = useState(false);
 
@@ -152,11 +154,22 @@ export function ProjectsPage({ onNavigate, pendingModal, onModalHandled }: Proje
       ) : (
         <div className="projects-grid">
           {projectList.map((project) => (
-            <div key={project.id} className="project-card">
+            <div 
+              key={project.id} 
+              className="project-card"
+              onClick={() => setSelectedProjectId(project.id)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === "Enter" && setSelectedProjectId(project.id)}
+            >
               <div className="project-header">
                 <h3 className="project-name">{project.name}</h3>
-                <div className="project-actions">
-                  <button className="btn btn-ghost btn-sm" title="Edit">
+                <div className="project-actions" onClick={(e) => e.stopPropagation()}>
+                  <button 
+                    className="btn btn-ghost btn-sm" 
+                    title="Edit"
+                    onClick={() => setSelectedProjectId(project.id)}
+                  >
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: 16, height: 16 }}>
                       <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
                       <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
@@ -184,6 +197,15 @@ export function ProjectsPage({ onNavigate, pendingModal, onModalHandled }: Proje
             </div>
           ))}
         </div>
+      )}
+
+      {/* Project Detail Modal */}
+      {selectedProjectId && (
+        <ProjectDetail
+          projectId={selectedProjectId}
+          onClose={() => setSelectedProjectId(null)}
+          onUpdate={loadProjects}
+        />
       )}
 
       <style>{`
@@ -242,10 +264,16 @@ export function ProjectsPage({ onNavigate, pendingModal, onModalHandled }: Proje
           border: 1px solid var(--border);
           border-radius: 0.75rem;
           padding: 1.25rem;
-          transition: border-color 0.2s;
+          transition: border-color 0.2s, transform 0.2s;
+          cursor: pointer;
         }
         .project-card:hover {
           border-color: var(--primary);
+          transform: translateY(-2px);
+        }
+        .project-card:focus {
+          outline: 2px solid var(--primary);
+          outline-offset: 2px;
         }
         .project-header {
           display: flex;
