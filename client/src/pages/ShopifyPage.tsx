@@ -25,7 +25,7 @@ interface ShopInfo {
 }
 
 export function ShopifyPage() {
-  const { addToast } = useToast();
+  const { showToast } = useToast();
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [shop, setShop] = useState<ShopInfo | null>(null);
@@ -66,14 +66,14 @@ export function ShopifyPage() {
       setShop(shopData.shop);
       setProducts(productsData.products);
     } catch (error) {
-      addToast("Failed to load shop data", "error");
+      showToast("error", "Failed to load shop data");
     }
   };
 
 
   const handleConnect = () => {
     if (!shopDomain) {
-      addToast("Please enter your shop domain", "error");
+      showToast("error", "Please enter your shop domain");
       return;
     }
     const domain = shopDomain.includes(".myshopify.com") 
@@ -92,9 +92,9 @@ export function ShopifyPage() {
         keywords,
       });
       setGeneratedDescription(result.generatedDescription);
-      addToast("Description generated!", "success");
+      showToast("success", "Description generated!");
     } catch (error) {
-      addToast("Failed to generate description", "error");
+      showToast("error", "Failed to generate description");
     } finally {
       setGenerating(false);
     }
@@ -105,7 +105,7 @@ export function ShopifyPage() {
     
     try {
       await shopify.updateDescription(selectedProduct.id, generatedDescription);
-      addToast("Description updated in Shopify!", "success");
+      showToast("success", "Description updated in Shopify!");
       
       // Update local state
       setProducts(products.map(p => 
@@ -115,7 +115,7 @@ export function ShopifyPage() {
       ));
       setSelectedProduct({ ...selectedProduct, description: generatedDescription });
     } catch (error) {
-      addToast("Failed to update description", "error");
+      showToast("error", "Failed to update description");
     }
   };
 
