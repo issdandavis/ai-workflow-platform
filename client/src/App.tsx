@@ -19,8 +19,9 @@ import { FleetPage } from "./pages/FleetPage";
 import { RoundtablePage } from "./pages/RoundtablePage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { IntegrationsPage } from "./pages/IntegrationsPage";
+import { ShopifyPage } from "./pages/ShopifyPage";
 
-export type Page = "dashboard" | "projects" | "chat" | "fleet" | "roundtable" | "settings" | "integrations";
+export type Page = "dashboard" | "projects" | "chat" | "fleet" | "roundtable" | "settings" | "integrations" | "shopify";
 
 export interface NavigateOptions {
   openModal?: "create" | "detail";
@@ -69,6 +70,7 @@ function AppContent() {
       case "roundtable": return <RoundtablePage onNavigate={navigate} pendingModal={pendingModal} onModalHandled={clearPendingModal} />;
       case "settings": return <SettingsPage />;
       case "integrations": return <IntegrationsPage />;
+      case "shopify": return <ShopifyPage />;
       default: return <Dashboard onNavigate={navigate} />;
     }
   };

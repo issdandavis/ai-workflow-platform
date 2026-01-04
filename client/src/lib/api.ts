@@ -184,3 +184,30 @@ export const system = {
 };
 
 export { ApiError };
+
+
+// Shopify API
+export const shopify = {
+  getSession: () =>
+    request<{ authenticated: boolean; shop?: string }>("/api/shopify/auth/session"),
+  
+  getShop: () =>
+    request<{ shop: { name: string; email: string; myshopifyDomain: string; plan: { displayName: string }; primaryDomain: { url: string } } }>("/api/shopify/shop"),
+  
+  getProducts: () =>
+    request<{ products: Array<{ id: string; title: string; description: string; handle: string; status: string; image?: string; price?: string }> }>("/api/shopify/products"),
+  
+  generateDescription: (productId: string, options: { tone?: string; keywords?: string; aiModel?: string }) =>
+    request<{ productId: string; originalDescription: string; generatedDescription: string; aiModel: string }>(`/api/shopify/products/${encodeURIComponent(productId)}/generate-description`, {
+      method: "POST",
+      body: options,
+    }),
+  
+  updateDescription: (productId: string, description: string) =>
+    request<{ success: boolean; product: any }>(`/api/shopify/products/${encodeURIComponent(productId)}/description`, {
+      method: "PUT",
+      body: { description },
+    }),
+  
+  getAuthUrl: (shop: string) => `/api/shopify/auth?shop=${encodeURIComponent(shop)}`,
+};

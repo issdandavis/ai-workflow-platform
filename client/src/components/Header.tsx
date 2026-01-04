@@ -6,7 +6,7 @@ import React, { useState, useEffect } from "react";
 import { system } from "../lib/api";
 import { ThemeToggle } from "./ui/ThemeToggle";
 
-type Page = "dashboard" | "projects" | "chat" | "fleet" | "roundtable" | "settings" | "integrations";
+type Page = "dashboard" | "projects" | "chat" | "fleet" | "roundtable" | "settings" | "integrations" | "shopify";
 
 interface HeaderProps {
   currentPage: Page;
@@ -21,6 +21,7 @@ const pageTitles: Record<Page, string> = {
   roundtable: "Roundtable",
   settings: "Settings",
   integrations: "Integrations",
+  shopify: "Shopify",
 };
 
 const menuIcon = (

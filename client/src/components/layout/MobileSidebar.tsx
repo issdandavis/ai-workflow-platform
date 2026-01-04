@@ -5,7 +5,7 @@
 import React, { useEffect, useRef, JSX } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 
-type Page = "dashboard" | "projects" | "chat" | "fleet" | "roundtable" | "settings" | "integrations";
+type Page = "dashboard" | "projects" | "chat" | "fleet" | "roundtable" | "settings" | "integrations" | "shopify";
 
 interface MobileSidebarProps {
   isOpen: boolean;
@@ -20,6 +20,7 @@ const navItems: { id: Page; label: string; icon: string; section: string }[] = [
   { id: "chat", label: "AI Chat", icon: "message", section: "AI Tools" },
   { id: "fleet", label: "Fleet Engine", icon: "cpu", section: "AI Tools" },
   { id: "roundtable", label: "Roundtable", icon: "users", section: "AI Tools" },
+  { id: "shopify", label: "Shopify", icon: "shop", section: "Integrations" },
   { id: "integrations", label: "Integrations", icon: "link", section: "Settings" },
   { id: "settings", label: "Settings", icon: "settings", section: "Settings" },
 ];
@@ -63,6 +64,12 @@ const icons: Record<string, JSX.Element> = {
       <circle cx="9" cy="7" r="4" />
       <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
       <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+    </svg>
+  ),
+  shop: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+      <polyline points="9 22 9 12 15 12 15 22" />
     </svg>
   ),
   link: (
