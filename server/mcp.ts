@@ -509,7 +509,7 @@ export function createMcpRouter() {
 
     const rl = rateLimit(apiKeyId);
     if (!rl.ok) {
-      res.setHeader("Retry-After", String(rl.retryAfterSec));
+      res.setHeader("Retry-After", String((rl as any).retryAfterSec));
       return res.status(429).json({ error: "Rate limited" });
     }
 

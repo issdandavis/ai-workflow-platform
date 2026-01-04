@@ -111,7 +111,7 @@ async function executeLocalTool(toolName: string, args: Record<string, unknown>,
           orgId: ctx.orgId,
           provider: String(args.provider),
           status: "connected",
-          metadataJson: (args.metadata as Record<string, unknown>) || {},
+          metadataJson: (args.metadata as Record<string, unknown>) || {} as any,
         });
         return { result: { id: integration.id, provider: integration.provider, status: integration.status } };
       }
@@ -125,7 +125,7 @@ async function executeLocalTool(toolName: string, args: Record<string, unknown>,
           status: "queued",
           model: String(args.model ?? "gemini-2.0-flash"),
           provider: String(args.provider ?? "gemini"),
-          inputJson: { goal: args.goal },
+          inputJson: { goal: args.goal } as any,
           outputJson: null,
           costEstimate: null,
         });

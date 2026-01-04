@@ -236,7 +236,7 @@ export class DbStorage implements IStorage {
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const [user] = await db.insert(users).values(insertUser).returning();
+    const [user] = await db.insert(users).values(insertUser as any).returning();
     return user;
   }
 
@@ -253,7 +253,7 @@ export class DbStorage implements IStorage {
           firstName: userData.firstName,
           lastName: userData.lastName,
           profileImageUrl: userData.profileImageUrl,
-        })
+        } as any)
         .where(eq(users.email, email))
         .returning();
       return updated;
@@ -269,7 +269,7 @@ export class DbStorage implements IStorage {
           firstName: userData.firstName,
           lastName: userData.lastName,
           profileImageUrl: userData.profileImageUrl,
-        })
+        } as any)
         .where(eq(users.id, userData.id))
         .returning();
       return updated;
@@ -286,7 +286,7 @@ export class DbStorage implements IStorage {
         firstName: userData.firstName,
         lastName: userData.lastName,
         profileImageUrl: userData.profileImageUrl,
-      })
+      } as any)
       .returning();
     return user;
   }
@@ -294,7 +294,7 @@ export class DbStorage implements IStorage {
   async updateUserLoginAttempts(userId: string, failedAttempts: number, lockedUntil: Date | null): Promise<void> {
     await db
       .update(users)
-      .set({ failedAttempts, lockedUntil })
+      .set({ failedAttempts, lockedUntil } as any)
       .where(eq(users.id, userId));
   }
 
@@ -316,7 +316,7 @@ export class DbStorage implements IStorage {
   }
 
   async createOrg(insertOrg: InsertOrg): Promise<Org> {
-    const [org] = await db.insert(orgs).values(insertOrg).returning();
+    const [org] = await db.insert(orgs).values(insertOrg as any).returning();
     return org;
   }
 
@@ -331,7 +331,7 @@ export class DbStorage implements IStorage {
   }
 
   async createProject(insertProject: InsertProject): Promise<Project> {
-    const [project] = await db.insert(projects).values(insertProject).returning();
+    const [project] = await db.insert(projects).values(insertProject as any).returning();
     return project;
   }
 
@@ -363,14 +363,14 @@ export class DbStorage implements IStorage {
   }
 
   async createIntegration(insertIntegration: InsertIntegration): Promise<Integration> {
-    const [integration] = await db.insert(integrations).values(insertIntegration).returning();
+    const [integration] = await db.insert(integrations).values(insertIntegration as any).returning();
     return integration;
   }
 
   async updateIntegration(id: string, update: Partial<InsertIntegration>): Promise<Integration | undefined> {
     const [integration] = await db
       .update(integrations)
-      .set({ ...update, updatedAt: new Date() })
+      .set({ ...update, updatedAt: new Date() } as any)
       .where(eq(integrations.id, id))
       .returning();
     return integration;
@@ -379,7 +379,7 @@ export class DbStorage implements IStorage {
   async disconnectIntegration(id: string): Promise<void> {
     await db
       .update(integrations)
-      .set({ status: "disconnected", updatedAt: new Date() })
+      .set({ status: "disconnected", updatedAt: new Date() } as any)
       .where(eq(integrations.id, id));
   }
 
@@ -395,7 +395,7 @@ export class DbStorage implements IStorage {
   }
 
   async createSecretRef(insertSecretRef: InsertSecretRef): Promise<SecretRef> {
-    const [secretRef] = await db.insert(secretsRef).values(insertSecretRef).returning();
+    const [secretRef] = await db.insert(secretsRef).values(insertSecretRef as any).returning();
     return secretRef;
   }
 
@@ -414,7 +414,7 @@ export class DbStorage implements IStorage {
   }
 
   async createAgentRun(insertAgentRun: InsertAgentRun): Promise<AgentRun> {
-    const [agentRun] = await db.insert(agentRuns).values(insertAgentRun).returning();
+    const [agentRun] = await db.insert(agentRuns).values(insertAgentRun as any).returning();
     return agentRun;
   }
 
@@ -445,7 +445,7 @@ export class DbStorage implements IStorage {
   }
 
   async createMessage(insertMessage: InsertMessage): Promise<Message> {
-    const [message] = await db.insert(messages).values(insertMessage).returning();
+    const [message] = await db.insert(messages).values(insertMessage as any).returning();
     return message;
   }
 
@@ -472,13 +472,13 @@ export class DbStorage implements IStorage {
   }
 
   async createMemoryItem(insertMemoryItem: InsertMemoryItem): Promise<MemoryItem> {
-    const [memoryItem] = await db.insert(memoryItems).values(insertMemoryItem).returning();
+    const [memoryItem] = await db.insert(memoryItems).values(insertMemoryItem as any).returning();
     return memoryItem;
   }
 
   // Audit log
   async createAuditLog(insertAuditLog: InsertAuditLog): Promise<AuditLog> {
-    const [log] = await db.insert(auditLog).values(insertAuditLog).returning();
+    const [log] = await db.insert(auditLog).values(insertAuditLog as any).returning();
     return log;
   }
 
@@ -501,7 +501,7 @@ export class DbStorage implements IStorage {
   }
 
   async createBudget(insertBudget: InsertBudget): Promise<Budget> {
-    const [budget] = await db.insert(budgets).values(insertBudget).returning();
+    const [budget] = await db.insert(budgets).values(insertBudget as any).returning();
     return budget;
   }
 
@@ -511,7 +511,7 @@ export class DbStorage implements IStorage {
       .set({
         spentUsd: sql`${budgets.spentUsd} + ${amount}`,
         updatedAt: new Date(),
-      })
+      } as any)
       .where(eq(budgets.id, id));
   }
 
@@ -521,7 +521,7 @@ export class DbStorage implements IStorage {
       .set({
         limitUsd,
         updatedAt: new Date(),
-      })
+      } as any)
       .where(eq(budgets.id, id));
   }
 
@@ -531,7 +531,7 @@ export class DbStorage implements IStorage {
       .set({
         spentUsd: "0",
         updatedAt: new Date(),
-      })
+      } as any)
       .where(eq(budgets.id, id));
   }
 
@@ -546,7 +546,7 @@ export class DbStorage implements IStorage {
   }
 
   async createApiKey(insertApiKey: InsertApiKey): Promise<ApiKey> {
-    const [apiKey] = await db.insert(apiKeys).values(insertApiKey).returning();
+    const [apiKey] = await db.insert(apiKeys).values(insertApiKey as any).returning();
     return apiKey;
   }
 
@@ -576,14 +576,14 @@ export class DbStorage implements IStorage {
   }
 
   async createUserCredential(credential: InsertUserCredential): Promise<UserCredential> {
-    const [created] = await db.insert(userCredentials).values(credential).returning();
+    const [created] = await db.insert(userCredentials).values(credential as any).returning();
     return created;
   }
 
   async updateUserCredential(id: string, update: Partial<InsertUserCredential>): Promise<UserCredential> {
     const [updated] = await db
       .update(userCredentials)
-      .set({ ...update, updatedAt: new Date() })
+      .set({ ...update, updatedAt: new Date() } as any)
       .where(eq(userCredentials.id, id))
       .returning();
     return updated;
@@ -592,7 +592,7 @@ export class DbStorage implements IStorage {
   async updateCredentialLastUsed(id: string): Promise<void> {
     await db
       .update(userCredentials)
-      .set({ lastUsedAt: new Date() })
+      .set({ lastUsedAt: new Date() } as any)
       .where(eq(userCredentials.id, id));
   }
 
@@ -602,7 +602,7 @@ export class DbStorage implements IStorage {
 
   // Usage Records
   async createUsageRecord(record: InsertUsageRecord): Promise<UsageRecord> {
-    const [created] = await db.insert(usageRecords).values(record).returning();
+    const [created] = await db.insert(usageRecords).values(record as any).returning();
     return created;
   }
 
@@ -650,7 +650,7 @@ export class DbStorage implements IStorage {
 
   // Decision Traces
   async createDecisionTrace(trace: InsertDecisionTrace): Promise<DecisionTrace> {
-    const [created] = await db.insert(decisionTraces).values(trace).returning();
+    const [created] = await db.insert(decisionTraces).values(trace as any).returning();
     return created;
   }
 
@@ -691,7 +691,7 @@ export class DbStorage implements IStorage {
         approvalStatus: "approved",
         approvedBy: userId,
         approvedAt: new Date(),
-      })
+      } as any)
       .where(eq(decisionTraces.id, id))
       .returning();
     return updated;
@@ -705,7 +705,7 @@ export class DbStorage implements IStorage {
         approvedBy: userId,
         approvedAt: new Date(),
         rejectionReason: reason,
-      })
+      } as any)
       .where(eq(decisionTraces.id, id))
       .returning();
     return updated;
@@ -713,7 +713,7 @@ export class DbStorage implements IStorage {
 
   // Roundtable Sessions
   async createRoundtableSession(data: InsertRoundtableSession): Promise<RoundtableSession> {
-    const [session] = await db.insert(roundtableSessions).values(data).returning();
+    const [session] = await db.insert(roundtableSessions).values(data as any).returning();
     return session;
   }
 
@@ -733,7 +733,7 @@ export class DbStorage implements IStorage {
   async updateRoundtableSession(id: string, updates: Partial<RoundtableSession>): Promise<RoundtableSession> {
     const [updated] = await db
       .update(roundtableSessions)
-      .set({ ...updates, updatedAt: new Date() })
+      .set({ ...updates, updatedAt: new Date() } as any)
       .where(eq(roundtableSessions.id, id))
       .returning();
     return updated;
@@ -741,7 +741,7 @@ export class DbStorage implements IStorage {
 
   // Roundtable Messages
   async createRoundtableMessage(data: InsertRoundtableMessage): Promise<RoundtableMessage> {
-    const [message] = await db.insert(roundtableMessages).values(data).returning();
+    const [message] = await db.insert(roundtableMessages).values(data as any).returning();
     return message;
   }
 
@@ -763,7 +763,7 @@ export class DbStorage implements IStorage {
 
   // Agent Analyses
   async createAgentAnalysis(data: InsertAgentAnalysis): Promise<AgentAnalysis> {
-    const [analysis] = await db.insert(agentAnalyses).values(data).returning();
+    const [analysis] = await db.insert(agentAnalyses).values(data as any).returning();
     return analysis;
   }
 
@@ -782,7 +782,7 @@ export class DbStorage implements IStorage {
 
   // Agent Suggestions
   async createAgentSuggestion(data: InsertAgentSuggestion): Promise<AgentSuggestion> {
-    const [suggestion] = await db.insert(agentSuggestions).values(data).returning();
+    const [suggestion] = await db.insert(agentSuggestions).values(data as any).returning();
     return suggestion;
   }
 
@@ -801,7 +801,7 @@ export class DbStorage implements IStorage {
 
   // Agent Proposals
   async createAgentProposal(data: InsertAgentProposal): Promise<AgentProposal> {
-    const [proposal] = await db.insert(agentProposals).values(data).returning();
+    const [proposal] = await db.insert(agentProposals).values(data as any).returning();
     return proposal;
   }
 
@@ -813,7 +813,7 @@ export class DbStorage implements IStorage {
   async updateAgentProposalStatus(id: number, status: string, approvedBy?: string): Promise<AgentProposal | undefined> {
     const [proposal] = await db
       .update(agentProposals)
-      .set({ status: status as any, approvedBy })
+      .set({ status: status as any, approvedBy } as any)
       .where(eq(agentProposals.id, id))
       .returning();
     return proposal;
@@ -841,14 +841,14 @@ export class DbStorage implements IStorage {
   }
 
   async createUserProfile(data: InsertUserProfile): Promise<UserProfile> {
-    const [profile] = await db.insert(userProfiles).values(data).returning();
+    const [profile] = await db.insert(userProfiles).values(data as any).returning();
     return profile;
   }
 
   async updateUserProfile(userId: string, data: Partial<InsertUserProfile>): Promise<UserProfile | undefined> {
     const [profile] = await db
       .update(userProfiles)
-      .set({ ...data, updatedAt: new Date() })
+      .set({ ...data, updatedAt: new Date() } as any)
       .where(eq(userProfiles.userId, userId))
       .returning();
     return profile;
@@ -987,14 +987,14 @@ export class DbStorage implements IStorage {
   }
 
   async createWorkflow(data: InsertWorkflow): Promise<Workflow> {
-    const [workflow] = await db.insert(workflows).values(data).returning();
+    const [workflow] = await db.insert(workflows).values(data as any).returning();
     return workflow;
   }
 
   async updateWorkflow(id: string, updates: Partial<InsertWorkflow>): Promise<Workflow | undefined> {
     const [workflow] = await db
       .update(workflows)
-      .set({ ...updates, updatedAt: new Date() })
+      .set({ ...updates, updatedAt: new Date() } as any)
       .where(eq(workflows.id, id))
       .returning();
     return workflow;
@@ -1005,14 +1005,14 @@ export class DbStorage implements IStorage {
   }
 
   async createWorkflowRun(data: InsertWorkflowRun): Promise<WorkflowRun> {
-    const [run] = await db.insert(workflowRuns).values(data).returning();
+    const [run] = await db.insert(workflowRuns).values(data as any).returning();
     await db
       .update(workflows)
       .set({ 
         lastRunAt: new Date(), 
         runCount: sql`${workflows.runCount} + 1`,
         updatedAt: new Date() 
-      })
+      } as any)
       .where(eq(workflows.id, data.workflowId));
     return run;
   }
@@ -1036,7 +1036,7 @@ export class DbStorage implements IStorage {
 
   // Zapier Webhooks
   async createZapierWebhook(data: InsertZapierWebhook): Promise<ZapierWebhook> {
-    const [webhook] = await db.insert(zapierWebhooks).values(data).returning();
+    const [webhook] = await db.insert(zapierWebhooks).values(data as any).returning();
     return webhook;
   }
 
@@ -1074,7 +1074,7 @@ export class DbStorage implements IStorage {
   }
 
   async createZapierWebhookLog(data: InsertZapierWebhookLog): Promise<ZapierWebhookLog> {
-    const [log] = await db.insert(zapierWebhookLogs).values(data).returning();
+    const [log] = await db.insert(zapierWebhookLogs).values(data as any).returning();
     return log;
   }
 
@@ -1102,14 +1102,14 @@ export class DbStorage implements IStorage {
   }
 
   async createWorkspace(data: InsertWorkspace): Promise<Workspace> {
-    const [workspace] = await db.insert(workspaces).values(data).returning();
+    const [workspace] = await db.insert(workspaces).values(data as any).returning();
     return workspace;
   }
 
   async updateWorkspace(id: string, data: Partial<InsertWorkspace>): Promise<Workspace | undefined> {
     const [workspace] = await db
       .update(workspaces)
-      .set({ ...data, updatedAt: new Date() })
+      .set({ ...data, updatedAt: new Date() } as any)
       .where(eq(workspaces.id, id))
       .returning();
     return workspace;
@@ -1127,14 +1127,14 @@ export class DbStorage implements IStorage {
   }
 
   async createSubscription(data: InsertSubscription): Promise<Subscription> {
-    const [subscription] = await db.insert(subscriptions).values(data).returning();
+    const [subscription] = await db.insert(subscriptions).values(data as any).returning();
     return subscription;
   }
 
   async updateSubscription(id: string, data: Partial<InsertSubscription>): Promise<Subscription | undefined> {
     const [subscription] = await db
       .update(subscriptions)
-      .set({ ...data, updatedAt: new Date() })
+      .set({ ...data, updatedAt: new Date() } as any)
       .where(eq(subscriptions.id, id))
       .returning();
     return subscription;
@@ -1147,14 +1147,14 @@ export class DbStorage implements IStorage {
   }
 
   async createPromoRedemption(data: InsertPromoRedemption): Promise<PromoRedemption> {
-    const [redemption] = await db.insert(promoRedemptions).values(data).returning();
+    const [redemption] = await db.insert(promoRedemptions).values(data as any).returning();
     return redemption;
   }
 
   async incrementPromoCodeUsage(id: string): Promise<void> {
     await db
       .update(promoCodes)
-      .set({ usedCount: sql`${promoCodes.usedCount} + 1` })
+      .set({ usedCount: sql`${promoCodes.usedCount} + 1` } as any)
       .where(eq(promoCodes.id, id));
   }
 

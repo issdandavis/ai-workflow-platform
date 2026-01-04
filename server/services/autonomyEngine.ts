@@ -545,7 +545,7 @@ Break down this goal into specific actions. Respond with a JSON array of steps:
     const response = await adapter.chat([
       { role: "system", content: "You are an autonomous AI agent. Respond only with valid JSON." },
       { role: "user", content: planningPrompt }
-    ], { model: session.model });
+    ], session.model);
     
     // Parse the AI's plan
     const planMatch = response.content.match(/\[[\s\S]*\]/);

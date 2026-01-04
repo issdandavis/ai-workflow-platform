@@ -3983,7 +3983,7 @@ Format your response as JSON with the following structure:
 
       let response: string;
       if (messages && messages.length > 0) {
-        response = await chat(messages, model);
+        response = await chat(messages as { role: string; content: string }[], model);
       } else if (prompt) {
         response = await generateText(prompt, model);
       } else {

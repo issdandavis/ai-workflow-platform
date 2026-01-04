@@ -117,7 +117,7 @@ export async function trackUsage(
     outputTokens,
     estimatedCostUsd: cost.toFixed(6),
     metadata: metadata || null,
-  });
+  } as any);
 
   await updateBudgetSpend(orgId, cost);
 }
@@ -137,7 +137,7 @@ async function updateBudgetSpend(orgId: string, costUsd: number): Promise<void> 
       .set({
         spentUsd: newSpent.toFixed(2),
         updatedAt: new Date(),
-      })
+      } as any)
       .where(eq(budgets.id, budget.id));
   }
 }
@@ -257,13 +257,13 @@ export async function getUsageSummary(
 export async function resetDailyBudgets(): Promise<void> {
   await db
     .update(budgets)
-    .set({ spentUsd: "0", updatedAt: new Date() })
+    .set({ spentUsd: "0", updatedAt: new Date() } as any)
     .where(eq(budgets.period, "daily"));
 }
 
 export async function resetMonthlyBudgets(): Promise<void> {
   await db
     .update(budgets)
-    .set({ spentUsd: "0", updatedAt: new Date() })
+    .set({ spentUsd: "0", updatedAt: new Date() } as any)
     .where(eq(budgets.period, "monthly"));
 }

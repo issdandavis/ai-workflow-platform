@@ -142,7 +142,7 @@ export async function analyzeCode(options: CodeImprovementOptions): Promise<{
     userId,
     filePath,
     content,
-    analysisResult,
+    analysisResult: analysisResult as any,
   });
 
   // Track usage for cost analytics
@@ -222,7 +222,7 @@ export async function generateImprovement(
     provider,
     model: model || defaultModel,
     prompt,
-    suggestions: targetSuggestion,
+    suggestions: targetSuggestion as any,
     diffPreview,
   });
 

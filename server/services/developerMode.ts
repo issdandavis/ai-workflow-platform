@@ -529,7 +529,7 @@ Format your response as:
   const response = await adapter.chat([
     { role: "system", content: "You are an expert code improvement assistant. Always provide complete, working code." },
     { role: "user", content: prompt }
-  ], { model });
+  ], model);
   
   // Parse the response
   const codeMatch = response.content.match(/<improved_code>([\s\S]*?)<\/improved_code>/);

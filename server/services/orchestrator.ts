@@ -91,8 +91,8 @@ class OrchestratorQueue extends EventEmitter {
         decision,
         reasoning,
         confidence: confidence.toString(),
-        alternatives: options?.alternatives as Record<string, unknown>[] | undefined,
-        contextUsed: options?.contextUsed as Record<string, unknown> | undefined,
+        alternatives: options?.alternatives as any,
+        contextUsed: options?.contextUsed as any,
         durationMs,
         approvalStatus: requiresApproval ? "pending" : "not_required",
       });

@@ -76,7 +76,7 @@ export async function createSession(
       activeProviders: config.providers,
       createdBy: userId,
       status: "active",
-    })
+    } as any)
     .returning();
 
   return session;
@@ -114,7 +114,7 @@ export async function addUserMessage(
       senderId: userId,
       content,
       sequenceNumber,
-    })
+    } as any)
     .returning();
 
   return message;
@@ -135,7 +135,7 @@ export async function executeNextTurn(
   }
 
   if (session.currentTurn >= (session.maxTurns || 20)) {
-    await db.update(roundtableSessions).set({ status: "completed" }).where(eq(roundtableSessions.id, sessionId));
+    await db.update(roundtableSessions).set({ status: "completed" } as any).where(eq(roundtableSessions.id, sessionId));
     return { provider: "", model: "", content: "", tokensUsed: 0, responseTimeMs: 0, success: false, error: "Maximum turns reached" };
   }
 
@@ -198,11 +198,11 @@ export async function executeNextTurn(
     sequenceNumber,
     tokensUsed,
     responseTimeMs,
-  });
+  } as any);
 
   await db
     .update(roundtableSessions)
-    .set({ currentTurn: session.currentTurn + 1, updatedAt: new Date() })
+    .set({ currentTurn: session.currentTurn + 1, updatedAt: new Date() } as any)
     .where(eq(roundtableSessions.id, sessionId));
 
   await trackUsage(
@@ -266,15 +266,15 @@ Provide your perspective on this topic. Be concise but insightful. End with "${P
 }
 
 export async function pauseSession(sessionId: string): Promise<void> {
-  await db.update(roundtableSessions).set({ status: "paused", updatedAt: new Date() }).where(eq(roundtableSessions.id, sessionId));
+  await db.update(roundtableSessions).set({ status: "paused", updatedAt: new Date() } as any).where(eq(roundtableSessions.id, sessionId));
 }
 
 export async function resumeSession(sessionId: string): Promise<void> {
-  await db.update(roundtableSessions).set({ status: "active", updatedAt: new Date() }).where(eq(roundtableSessions.id, sessionId));
+  await db.update(roundtableSessions).set({ status: "active", updatedAt: new Date() } as any).where(eq(roundtableSessions.id, sessionId));
 }
 
 export async function completeSession(sessionId: string): Promise<void> {
-  await db.update(roundtableSessions).set({ status: "completed", updatedAt: new Date() }).where(eq(roundtableSessions.id, sessionId));
+  await db.update(roundtableSessions).set({ status: "completed", updatedAt: new Date() } as any).where(eq(roundtableSessions.id, sessionId));
 }
 
 export async function listOrgSessions(orgId: string): Promise<RoundtableSession[]> {

@@ -89,7 +89,7 @@ async function logDelivery(
     const logData: InsertZapierWebhookLog = {
       webhookId,
       event,
-      payload,
+      payload: payload as any,
       responseStatus: result.statusCode ?? null,
       responseBody: result.body ?? null,
       success: result.success,
