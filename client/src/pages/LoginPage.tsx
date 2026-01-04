@@ -67,6 +67,25 @@ export function LoginPage() {
           <p>Multi-AI orchestration for your projects</p>
         </div>
 
+        {/* Quick Start - Most Prominent */}
+        <button
+          className="btn btn-primary btn-lg quick-start-btn"
+          onClick={handleGuestLogin}
+          disabled={loading}
+        >
+          {loading ? <span className="spinner" /> : "⚡ Try Free - No Sign Up"}
+        </button>
+        
+        <div className="features-quick">
+          <span>🤖 GPT-4, Claude, Gemini</span>
+          <span>•</span>
+          <span>🔑 No API keys needed</span>
+        </div>
+
+        <div className="divider">
+          <span>or sign in for full access</span>
+        </div>
+
         <div className="login-tabs">
           <button
             className={`tab ${mode === "login" ? "active" : ""}`}
@@ -128,22 +147,10 @@ export function LoginPage() {
             </div>
           )}
 
-          <button type="submit" className="btn btn-primary btn-lg submit-btn" disabled={loading}>
+          <button type="submit" className="btn btn-secondary btn-lg submit-btn" disabled={loading}>
             {loading ? <span className="spinner" /> : mode === "login" ? "Login" : "Create Account"}
           </button>
         </form>
-
-        <div className="divider">
-          <span>or</span>
-        </div>
-
-        <button
-          className="btn btn-secondary btn-lg guest-btn"
-          onClick={handleGuestLogin}
-          disabled={loading}
-        >
-          Continue as Guest
-        </button>
 
         <p className="login-footer">
           {mode === "login" ? "Don't have an account? " : "Already have an account? "}
@@ -193,6 +200,35 @@ export function LoginPage() {
           color: var(--text-muted);
           font-size: 0.875rem;
         }
+        .quick-start-btn {
+          width: 100%;
+          padding: 1rem;
+          font-size: 1.125rem;
+          margin-bottom: 0.75rem;
+        }
+        .features-quick {
+          display: flex;
+          justify-content: center;
+          gap: 0.5rem;
+          font-size: 0.75rem;
+          color: var(--text-muted);
+          margin-bottom: 1rem;
+        }
+        .divider {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          margin: 1rem 0;
+          color: var(--text-dim);
+          font-size: 0.75rem;
+        }
+        .divider::before,
+        .divider::after {
+          content: "";
+          flex: 1;
+          height: 1px;
+          background: var(--border);
+        }
         .login-tabs {
           display: flex;
           gap: 0.5rem;
@@ -239,24 +275,6 @@ export function LoginPage() {
         }
         .submit-btn {
           margin-top: 0.5rem;
-        }
-        .divider {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-          margin: 1.5rem 0;
-          color: var(--text-dim);
-          font-size: 0.8125rem;
-        }
-        .divider::before,
-        .divider::after {
-          content: "";
-          flex: 1;
-          height: 1px;
-          background: var(--border);
-        }
-        .guest-btn {
-          width: 100%;
         }
         .login-footer {
           text-align: center;
