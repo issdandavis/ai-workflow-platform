@@ -1165,6 +1165,34 @@ export class DbStorage implements IStorage {
       .where(and(eq(promoRedemptions.orgId, orgId), eq(promoRedemptions.promoCodeId, promoCodeId)));
     return !!existing;
   }
+
+  // Agent Metrics (for AI Development Engine)
+  async createAgentMetrics(data: {
+    taskId: string;
+    modelName: string;
+    tokensUsed: number;
+    healingIterations: number;
+    successRate: number;
+    executionTimeMs: number;
+  }): Promise<void> {
+    // Store in audit log for now (agent_metrics table requires migration)
+    await this.createAuditLog({
+      orgId: "system",
+      userId: null,
+      action: "agent_metrics_logged",
+      target: data.taskId,
+      detailJson: data,
+    });
+  }
+
+  // Recent Memory Items (for Vector Memory)
+  async getRecentMemoryItems(limit: number = 10): Promise<MemoryItem[]> {
+    return db
+      .select()
+      .from(memoryItems)
+      .orderBy(desc(memoryItems.createdAt))
+      .limit(limit);
+  }
 }
 
 export const storage = new DbStorage();

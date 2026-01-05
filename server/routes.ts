@@ -30,8 +30,11 @@ import crypto from "crypto";
 import shopifyRouter from "./shopify";
 import autonomyRoutes from "./services/autonomyRoutes";
 import fleetRoutes from "./services/fleetRoutes";
+import githubWebhookRouter from "./services/githubWebhook";
+import queueDashboardRouter from "./services/queueDashboard";
+import { aiDevelopmentEngine } from "./services/aiDevelopmentEngine";
 
-const VERSION = "1.0.0";
+const VERSION = "2.1.0";
 
 // SSE connections for agent run streaming
 const sseConnections = new Map<string, Response>();
@@ -80,6 +83,12 @@ export async function registerRoutes(
 
   // AI Fleet Engine routes - multi-AI parallel collaboration
   app.use("/api/fleet", fleetRoutes);
+
+  // GitHub webhook for AI-powered PR reviews
+  app.use("/api/webhooks", githubWebhookRouter);
+
+  // Queue Dashboard - Bull Board style observability at /admin/queues
+  app.use("/admin/queues", queueDashboardRouter);
 
   // Health endpoint - for hosting platforms (Render, Railway, etc.)
   app.get("/api/health", (req, res) => {
