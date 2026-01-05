@@ -23,6 +23,7 @@
 AI Workflow Platform is a comprehensive solution for businesses looking to leverage AI at scale. Built with a distinctive mystical aesthetic and enterprise-grade architecture, it provides:
 
 - **Multi-AI Orchestration** - Route requests across OpenAI, Anthropic, Google, Groq, Perplexity, and xAI with automatic failover
+- **Autonomous AI Development Engine** - Self-healing task queue with multi-AI roundtable consensus and sandboxed code execution
 - **Fleet Engine** - Coordinate multiple AI agents working in parallel on complex tasks
 - **Roundtable Discussions** - Watch AI models debate and collaborate on problems
 - **Zapier Integration Hub** - Pre-built workflow templates for lead generation, content creation, and automation
@@ -36,6 +37,14 @@ AI Workflow Platform is a comprehensive solution for businesses looking to lever
 - **Automatic Failover**: Seamless fallback when providers fail
 - **Cost Controls**: Budget limits with 80% threshold alerts
 - **AES-256-GCM Encryption**: Enterprise-grade API key security
+
+### 🧠 Autonomous AI Development Engine
+- **Self-Healing Task Queue**: Automatic retry with error context injection
+- **Multi-AI Roundtable Consensus**: GPT-4, Claude, and Gemini collaborate on solutions
+- **Sandboxed Execution**: E2B/Piston API for isolated code verification
+- **Vector Memory**: Embedding-based architectural consistency across tasks
+- **Real-time Dashboard**: Bull Board-style UI at `/admin/queues`
+- **GitHub Integration**: Webhook-triggered PR reviews and code generation
 
 ### 🚀 Fleet Engine
 - Launch coordinated AI missions with multiple agents
@@ -89,13 +98,15 @@ The platform features a distinctive **mystical/arcane theme**:
 ┌─────────────────────────────────────────────────────────────┐
 │                    Express API Server                        │
 │  Auth │ AI Orchestrator │ Webhooks │ Data Providers │ Fleet │
+│              AI Development Engine │ Queue Dashboard         │
 └─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                      Data Layer                              │
-│  PostgreSQL │ Notion │ Google Drive │ Dropbox │ Supabase    │
-└─────────────────────────────────────────────────────────────┘
+                    │                   │
+                    ▼                   ▼
+┌───────────────────────────┐  ┌───────────────────────────────┐
+│      Data Layer           │  │     Sandbox Execution         │
+│  PostgreSQL │ Supabase    │  │  E2B │ Piston │ Vector Memory │
+│  Notion │ Google │ Dropbox│  └───────────────────────────────┘
+└───────────────────────────┘
 ```
 
 ## 🚀 Quick Start
@@ -138,6 +149,11 @@ SESSION_SECRET=your-secret-key
 # Supabase (optional)
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_ANON_KEY=your-anon-key
+
+# AI Development Engine (optional)
+E2B_API_KEY=your-e2b-key          # For sandboxed code execution
+PISTON_API_URL=https://emkc.org/api/v2/piston  # Alternative sandbox
+GITHUB_WEBHOOK_SECRET=your-webhook-secret      # For PR review triggers
 ```
 
 ## 📦 Deployment

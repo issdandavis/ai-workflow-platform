@@ -39,6 +39,99 @@ When a provider fails:
 
 ---
 
+## 🧠 Autonomous AI Development Engine
+
+### What is the AI Development Engine?
+
+The AI Development Engine is a self-healing autonomous system that can generate, test, and fix code without human intervention. It uses a multi-AI roundtable for consensus-building and sandboxed execution for verification.
+
+### Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Task Queue (BullMQ-style)                │
+│  Priority-based │ Rate-limited │ Concurrent execution       │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                Multi-AI Roundtable Consensus                 │
+│  THE ARCHITECT (GPT-4o) - Scalability & design patterns     │
+│  THE BUG-HUNTER (Claude 3.7) - Edge cases & security        │
+│  THE PERFORMANCE ENGINEER (Gemini 2.0) - Runtime efficiency │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                  Sandboxed Verification                      │
+│  E2B Cloud │ Piston API │ Isolated npm install & test       │
+└─────────────────────────────────────────────────────────────┘
+                              │
+              ┌───────────────┴───────────────┐
+              ▼                               ▼
+       ┌─────────────┐                 ┌─────────────┐
+       │   Success   │                 │   Failure   │
+       │  Commit to  │                 │ Self-Heal   │
+       │   GitHub    │                 │ (max 3x)    │
+       └─────────────┘                 └─────────────┘
+```
+
+### Self-Healing Logic
+
+The engine implements a recursive self-healing state machine:
+
+1. **Task Received** - Code generation request enters queue
+2. **Context Retrieval** - Fetch relevant memory from vector store
+3. **Roundtable Consensus** - Multiple AIs debate the implementation
+4. **Sandbox Verification** - Run code in isolated environment
+5. **Self-Healing Loop** - If tests fail, re-queue with error logs (up to 3 attempts)
+6. **Finalize** - Commit to GitHub and store in vector memory
+
+### Task Types
+
+| Type | Description | Use Case |
+|------|-------------|----------|
+| `code_generation` | Generate new code from description | New features |
+| `pr_review` | Review pull request changes | Code quality |
+| `bug_fix` | Fix bugs with error context | Debugging |
+| `refactor` | Improve existing code | Tech debt |
+| `test_generation` | Generate test suites | Coverage |
+
+### Sandboxed Execution
+
+All AI-generated code runs in isolated environments:
+
+- **E2B** - Cloud-based sandboxes with full npm support
+- **Piston** - Self-hosted alternative with 50+ language support
+- **Mock Mode** - Syntax validation for development
+
+### Vector Memory
+
+The engine maintains architectural consistency through embeddings:
+
+- Stores successful task results with reasoning
+- Retrieves relevant context for new tasks
+- Ensures consistent patterns across the codebase
+
+### Queue Dashboard
+
+Monitor the engine at `/admin/queues`:
+
+- Real-time queue status
+- Active task count
+- Event stream (SSE)
+- Manual task enqueue
+
+### GitHub Integration
+
+Webhook endpoint at `/api/webhooks/github`:
+
+- Triggers on PR open/synchronize
+- Automatic code review
+- Priority queue for PR tasks
+
+---
+
 ## 🚀 Fleet Engine
 
 ### What is Fleet?

@@ -10,12 +10,57 @@ This guide covers configuration and infrastructure recommendations for handling 
 │   (React)   │     │   Server    │     │  Database   │
 └─────────────┘     └─────────────┘     └─────────────┘
                            │
-                           ▼
-                    ┌─────────────┐
-                    │   Session   │
-                    │    Store    │
-                    └─────────────┘
+              ┌────────────┼────────────┐
+              ▼            ▼            ▼
+       ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
+       │   Session   │ │  AI Dev     │ │   Sandbox   │
+       │    Store    │ │   Queue     │ │  (E2B/Piston)│
+       └─────────────┘ └─────────────┘ └─────────────┘
 ```
+
+## AI Development Engine Queue
+
+The AI Development Engine uses an in-memory priority queue with the following characteristics:
+
+### Queue Configuration
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| Concurrency | 2 | Max parallel tasks |
+| Max Healing | 3 | Self-healing retry limit |
+| Retry Delay | 5000ms | Delay between healing attempts |
+| Priority | 0-10 | Higher = processed first |
+
+### Scaling the Queue
+
+For high-volume autonomous development:
+
+```typescript
+// Increase concurrency for more parallel tasks
+const engine = new AIDevelopmentEngine();
+engine.concurrency = 5; // Handle 5 tasks simultaneously
+
+// For distributed processing, consider:
+// 1. Redis-backed BullMQ for multi-server queues
+// 2. Separate worker processes
+// 3. Kubernetes job scaling
+```
+
+### Monitoring
+
+Access the queue dashboard at `/admin/queues`:
+
+- Real-time queue length and active tasks
+- SSE event stream for live updates
+- Manual task enqueue for testing
+
+### Sandbox Resource Limits
+
+| Provider | Timeout | Memory | Best For |
+|----------|---------|--------|----------|
+| E2B | 30s | 256MB | Production |
+| Piston | 30s | 256MB | Self-hosted |
+| Mock | N/A | N/A | Development |
 
 ## Configuration Checklist
 
