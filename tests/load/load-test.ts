@@ -302,3 +302,5 @@ async function runLoadTests(): Promise<void> {
 
 // Run tests
 runLoadTests();
+
+export {};

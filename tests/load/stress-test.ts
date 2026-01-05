@@ -203,3 +203,5 @@ async function runStressTests(): Promise<void> {
 }
 
 runStressTests();
+
+export {};
