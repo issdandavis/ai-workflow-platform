@@ -1,0 +1,1046 @@
+[
+  {
+    "method": "GET",
+    "path": "/api/health",
+    "category": "system",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/status",
+    "category": "system",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/figma/screenshot",
+    "category": "figma",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/ai/providers",
+    "category": "ai",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/signup",
+    "category": "auth",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/login",
+    "category": "auth",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/guest",
+    "category": "auth",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/change-password",
+    "category": "auth",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/logout",
+    "category": "auth",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/auth/me",
+    "category": "auth",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/auth/user",
+    "category": "auth",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/assistant/chat",
+    "category": "assistant",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/integrations",
+    "category": "integrations",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/integrations/connect",
+    "category": "integrations",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/integrations/disconnect",
+    "category": "integrations",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/vault/credentials",
+    "category": "vault",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/vault/credentials",
+    "category": "vault",
+    "tested": false
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/vault/credentials/:id",
+    "category": "vault",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/vault/credentials/test",
+    "category": "vault",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/vault/usage",
+    "category": "vault",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/audit-logs",
+    "category": "audit",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/dashboard/stats",
+    "category": "dashboard",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/agents/run",
+    "category": "agents",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/agents/run/:runId",
+    "category": "agents",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/agents/stream/:runId",
+    "category": "agents",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/agents/run/:runId/traces",
+    "category": "agents",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/approvals/pending",
+    "category": "approvals",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/approvals/:traceId/approve",
+    "category": "approvals",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/approvals/:traceId/reject",
+    "category": "approvals",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/memory/add",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/memory/search",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/repos",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/repos/commit",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/projects",
+    "category": "projects",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/projects",
+    "category": "projects",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/workspaces/:id",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/workspaces",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/workspaces/:id",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/workspaces/:id",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/zapier/apikey/generate",
+    "category": "zapier",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/zapier/trigger",
+    "category": "zapier",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/zapier/status/:runId",
+    "category": "system",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/zapier-mcp/test",
+    "category": "zapier",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/zapier-mcp/connect",
+    "category": "zapier",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/zapier-mcp/tools",
+    "category": "zapier",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/zapier-mcp/call",
+    "category": "zapier",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/zapier/hooks/subscribe",
+    "category": "zapier",
+    "tested": false
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/zapier/hooks/:id",
+    "category": "zapier",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/zapier/hooks",
+    "category": "zapier",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/zapier/hooks/:id/logs",
+    "category": "zapier",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/zapier/actions/create-project",
+    "category": "zapier",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/zapier/actions/run-agent",
+    "category": "zapier",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/zapier/actions/add-memory",
+    "category": "zapier",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/zapier/actions/create-roundtable",
+    "category": "zapier",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/zapier/search/projects",
+    "category": "projects",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/zapier/search/agent-runs",
+    "category": "agents",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/zapier/search/users",
+    "category": "zapier",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/zapier/sample/:event",
+    "category": "zapier",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/zapier/events",
+    "category": "zapier",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/usage",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/budgets",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/budgets",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/circuits",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/circuits/reset",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/github/user",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/github/repos",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/github/repo",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/github/file",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/github/branch",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/github/pull-request",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/google-drive/status",
+    "category": "google-drive",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/google-drive/files",
+    "category": "google-drive",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/google-drive/file/:fileId",
+    "category": "google-drive",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/google-drive/quota",
+    "category": "google-drive",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/google-drive/folder",
+    "category": "google-drive",
+    "tested": false
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/google-drive/file/:fileId",
+    "category": "google-drive",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/onedrive/status",
+    "category": "system",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/onedrive/user",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/onedrive/files",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/onedrive/file/:fileId",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/onedrive/quota",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/onedrive/folder",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/onedrive/file/:fileId",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/notion/status",
+    "category": "notion",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/notion/user",
+    "category": "notion",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/notion/pages",
+    "category": "notion",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/notion/databases",
+    "category": "notion",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/notion/page/:pageId",
+    "category": "notion",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/notion/database/:databaseId",
+    "category": "notion",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/notion/page",
+    "category": "notion",
+    "tested": false
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/notion/page/:pageId",
+    "category": "notion",
+    "tested": false
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/notion/page/:pageId",
+    "category": "notion",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/stripe/status",
+    "category": "system",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/stripe/publishable-key",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/stripe/products",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/stripe/prices",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/stripe/checkout",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/stripe/customer",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/stripe/portal",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/stripe/subscription/:subscriptionId",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/stripe/subscription/:subscriptionId",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/stripe/product",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/stripe/price",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/world-anvil/status",
+    "category": "system",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/world-anvil/user",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/world-anvil/worlds",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/world-anvil/world/:worldId",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/world-anvil/world/:worldId/articles",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/world-anvil/article/:articleId",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/world-anvil/world/:worldId/categories",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/world-anvil/world/:worldId/maps",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/world-anvil/world/:worldId/timelines",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/world-anvil/timeline/:timelineId",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/world-anvil/world/:worldId/search",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/workflows",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/workflows/:id",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/workflows",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "PUT",
+    "path": "/api/workflows/:id",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/workflows/:id",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/workflows/:id/run",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/roundtable/providers",
+    "category": "roundtable",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/roundtable/sessions",
+    "category": "roundtable",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/roundtable/sessions",
+    "category": "roundtable",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/roundtable/sessions/:id",
+    "category": "roundtable",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/roundtable/sessions/:id/message",
+    "category": "roundtable",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/roundtable/sessions/:id/ai-turn",
+    "category": "roundtable",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/roundtable/sessions/:id/round",
+    "category": "roundtable",
+    "tested": false
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/roundtable/sessions/:id",
+    "category": "roundtable",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/workbench/chat",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/workbench/synthesize",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/code-improvement/analyze",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/code-improvement/generate",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/code-improvement/proposals",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/code-improvement/proposals/:id",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/code-improvement/proposals/:id/approve",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/code-improvement/proposals/:id/reject",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/code-improvement/proposals/:id/apply",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/code-assistant/generate",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/ai/huggingface",
+    "category": "ai",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/agent-dev/analyze",
+    "category": "agents",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/agent-dev/suggest",
+    "category": "agents",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/agent-dev/apply",
+    "category": "agents",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/agent-dev/proposals",
+    "category": "agents",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/agent-dev/proposals/:id/approve",
+    "category": "agents",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/agent-dev/proposals/:id/reject",
+    "category": "agents",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/gemini/chat",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/gemini/image",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/gemini/status",
+    "category": "system",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/profile",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/profile",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/profile",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/storage/providers",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/storage/files/:provider",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/storage/download/:provider/:fileId",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/storage/folder/:provider",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/storage/:provider/:fileId",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/dropbox/status",
+    "category": "dropbox",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/dropbox/files",
+    "category": "dropbox",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/subscription",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/subscription/portal",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/promo/redeem",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/users",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/admin/users/:id",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/stats",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/audit-logs",
+    "category": "audit",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/export",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/status",
+    "category": "system",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/circuits/reset",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/profile",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/profile",
+    "category": "other",
+    "tested": false
+  },
+  {
+    "method": "ROUTER",
+    "path": "/api/shopify",
+    "category": "router",
+    "tested": false
+  },
+  {
+    "method": "ROUTER",
+    "path": "/api",
+    "category": "router",
+    "tested": false
+  },
+  {
+    "method": "ROUTER",
+    "path": "/api/fleet",
+    "category": "router",
+    "tested": false
+  }
+]

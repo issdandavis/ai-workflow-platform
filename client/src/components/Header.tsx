@@ -1,5 +1,6 @@
 /**
  * Header Component
+ * Mystical theme with arcane styling
  */
 
 import React, { useState, useEffect } from "react";
@@ -55,14 +56,14 @@ export function Header({ currentPage, onMobileMenuToggle }: HeaderProps) {
       <div className="header-left">
         {onMobileMenuToggle && (
           <button 
-            className="mobile-menu-btn" 
+            className="mobile-menu-btn mystical-focus" 
             onClick={onMobileMenuToggle}
             aria-label="Open navigation menu"
           >
             {menuIcon}
           </button>
         )}
-        <h1 className="header-title">{pageTitles[currentPage]}</h1>
+        <h1 className="header-title mystical-heading">{pageTitles[currentPage]}</h1>
       </div>
       <div className="header-actions">
         <div className={`status-badge ${apiStatus}`}>
@@ -74,8 +75,8 @@ export function Header({ currentPage, onMobileMenuToggle }: HeaderProps) {
 
       <style>{`
         .header {
-          background: var(--bg-card);
-          border-bottom: 1px solid var(--border);
+          background: var(--card-gradient, linear-gradient(135deg, var(--mystical-purple-deep, #2D2438) 0%, var(--mystical-purple-dark, #1A1625) 100%));
+          border-bottom: 1px solid var(--border-gold, rgba(201, 162, 39, 0.2));
           padding: 1rem 1.5rem;
           display: flex;
           justify-content: space-between;
@@ -83,6 +84,16 @@ export function Header({ currentPage, onMobileMenuToggle }: HeaderProps) {
           position: sticky;
           top: 0;
           z-index: 50;
+        }
+        .header::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: linear-gradient(90deg, transparent 0%, var(--mystical-gold, #C9A227) 50%, transparent 100%);
+          opacity: 0.3;
         }
         .header-left {
           display: flex;
@@ -92,26 +103,34 @@ export function Header({ currentPage, onMobileMenuToggle }: HeaderProps) {
         .header-title {
           font-size: 1.25rem;
           font-weight: 600;
+          color: var(--mystical-gold, #C9A227);
+        }
+        .header-title.mystical-heading {
+          font-family: 'Cinzel', 'Times New Roman', serif;
+          letter-spacing: 0.05em;
+          text-shadow: 0 0 15px rgba(201, 162, 39, 0.2);
         }
         .mobile-menu-btn {
           display: none;
           width: 44px;
           height: 44px;
           background: none;
-          border: 1px solid var(--border);
+          border: 1px solid var(--border-gold, rgba(201, 162, 39, 0.3));
           border-radius: 0.5rem;
           color: var(--text-muted);
           cursor: pointer;
           align-items: center;
           justify-content: center;
+          transition: all 0.2s;
         }
-        .mobile-menu-btn:hover, .mobile-menu-btn:focus {
-          background: var(--bg-hover);
-          color: var(--text);
+        .mobile-menu-btn:hover {
+          background: rgba(74, 144, 217, 0.1);
+          color: var(--mystical-gold, #C9A227);
+          border-color: var(--mystical-glow, #4A90D9);
         }
-        .mobile-menu-btn:focus {
-          outline: 2px solid var(--primary);
-          outline-offset: 2px;
+        .mystical-focus:focus-visible {
+          outline: none;
+          box-shadow: 0 0 0 2px var(--bg-dark), 0 0 0 4px var(--mystical-glow, #4A90D9), var(--glow-blue, 0 0 20px rgba(74, 144, 217, 0.3));
         }
         .mobile-menu-btn svg {
           width: 24px;
@@ -135,6 +154,7 @@ export function Header({ currentPage, onMobileMenuToggle }: HeaderProps) {
           background: rgba(34, 197, 94, 0.1);
           border: 1px solid rgba(34, 197, 94, 0.3);
           color: var(--success);
+          box-shadow: 0 0 10px rgba(34, 197, 94, 0.1);
         }
         .status-badge.disconnected {
           background: rgba(239, 68, 68, 0.1);
@@ -142,9 +162,9 @@ export function Header({ currentPage, onMobileMenuToggle }: HeaderProps) {
           color: var(--error);
         }
         .status-badge.checking {
-          background: rgba(245, 158, 11, 0.1);
-          border: 1px solid rgba(245, 158, 11, 0.3);
-          color: var(--warning);
+          background: rgba(201, 162, 39, 0.1);
+          border: 1px solid rgba(201, 162, 39, 0.3);
+          color: var(--mystical-gold, #C9A227);
         }
         @media (max-width: 768px) {
           .mobile-menu-btn {

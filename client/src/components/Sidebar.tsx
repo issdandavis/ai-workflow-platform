@@ -1,5 +1,6 @@
 /**
  * Sidebar Navigation Component
+ * Mystical theme with triskelion logo and arcane styling
  */
 
 import React, { JSX } from "react";
@@ -24,6 +25,36 @@ const navItems: { id: Page; label: string; icon: string; section: string }[] = [
   { id: "integrations", label: "Integrations", icon: "link", section: "Settings" },
   { id: "settings", label: "Settings", icon: "settings", section: "Settings" },
 ];
+
+// Triskelion Logo SVG Component
+const TriskelionLogo = ({ size = 28 }: { size?: number }) => (
+  <svg viewBox="0 0 100 100" width={size} height={size} className="triskelion-logo">
+    <defs>
+      <linearGradient id="sidebarGold" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#E5C76B" />
+        <stop offset="50%" stopColor="#C9A227" />
+        <stop offset="100%" stopColor="#8B7019" />
+      </linearGradient>
+      <filter id="sidebarGlow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="1.5" result="blur" />
+        <feFlood floodColor="#4A90D9" floodOpacity="0.5" />
+        <feComposite in2="blur" operator="in" />
+        <feMerge>
+          <feMergeNode />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
+    <circle cx="50" cy="50" r="46" fill="var(--mystical-blue-cosmic, #0A1628)" />
+    <circle cx="50" cy="50" r="44" fill="none" stroke="var(--mystical-blue-royal, #1E3A5F)" strokeWidth="1.5" />
+    <g transform="translate(50, 50)" filter="url(#sidebarGlow)">
+      <path d="M 0 0 Q 8 -4, 12 -12 Q 14 -20, 8 -24 Q 0 -28, -8 -22 Q -14 -16, -10 -8 Q -6 0, 0 0" fill="none" stroke="url(#sidebarGold)" strokeWidth="4" strokeLinecap="round" />
+      <path d="M 0 0 Q 8 -4, 12 -12 Q 14 -20, 8 -24 Q 0 -28, -8 -22 Q -14 -16, -10 -8 Q -6 0, 0 0" fill="none" stroke="url(#sidebarGold)" strokeWidth="4" strokeLinecap="round" transform="rotate(120)" />
+      <path d="M 0 0 Q 8 -4, 12 -12 Q 14 -20, 8 -24 Q 0 -28, -8 -22 Q -14 -16, -10 -8 Q -6 0, 0 0" fill="none" stroke="url(#sidebarGold)" strokeWidth="4" strokeLinecap="round" transform="rotate(240)" />
+      <circle cx="0" cy="0" r="3" fill="#C9A227" />
+    </g>
+  </svg>
+);
 
 const icons: Record<string, JSX.Element> = {
   grid: (
@@ -108,12 +139,10 @@ export function Sidebar({ currentPage, onNavigate, collapsed, onToggle }: Sideba
     <nav className={`sidebar ${collapsed ? "collapsed" : ""}`}>
       <div className="sidebar-header">
         <div className="logo">
-          <svg viewBox="0 0 24 24" fill="currentColor" className="logo-icon">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-          </svg>
-          {!collapsed && <span className="logo-text">AI Workflow</span>}
+          <TriskelionLogo size={collapsed ? 32 : 28} />
+          {!collapsed && <span className="logo-text mystical-heading">Arcane AI</span>}
         </div>
-        <button className="toggle-btn" onClick={onToggle}>
+        <button className="toggle-btn mystical-focus" onClick={onToggle} aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}>
           <span className={`chevron ${collapsed ? "rotated" : ""}`}>{icons.chevron}</span>
         </button>
       </div>
@@ -162,12 +191,22 @@ export function Sidebar({ currentPage, onNavigate, collapsed, onToggle }: Sideba
           top: 0;
           bottom: 0;
           width: 260px;
-          background: var(--bg-card);
-          border-right: 1px solid var(--border);
+          background: var(--card-gradient, linear-gradient(135deg, var(--mystical-purple-deep) 0%, var(--mystical-purple-dark) 100%));
+          border-right: 1px solid var(--border-gold, rgba(201, 162, 39, 0.3));
           display: flex;
           flex-direction: column;
           transition: width 0.3s;
           z-index: 100;
+        }
+        .sidebar::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background: linear-gradient(90deg, transparent 0%, var(--mystical-gold, #C9A227) 50%, transparent 100%);
+          opacity: 0.6;
         }
         .sidebar.collapsed {
           width: 72px;
@@ -177,24 +216,27 @@ export function Sidebar({ currentPage, onNavigate, collapsed, onToggle }: Sideba
           align-items: center;
           justify-content: space-between;
           padding: 1rem;
-          border-bottom: 1px solid var(--border);
+          border-bottom: 1px solid var(--border-gold, rgba(201, 162, 39, 0.2));
         }
         .logo {
           display: flex;
           align-items: center;
           gap: 0.75rem;
         }
-        .logo-icon {
-          width: 28px;
-          height: 28px;
-          color: var(--primary);
+        .triskelion-logo {
           flex-shrink: 0;
+          filter: drop-shadow(0 0 8px rgba(74, 144, 217, 0.3));
         }
         .logo-text {
           font-size: 1.125rem;
-          font-weight: 700;
-          color: var(--primary);
+          font-weight: 600;
+          color: var(--mystical-gold, #C9A227);
           white-space: nowrap;
+          text-shadow: 0 0 10px rgba(201, 162, 39, 0.3);
+        }
+        .mystical-heading {
+          font-family: 'Cinzel', 'Times New Roman', serif;
+          letter-spacing: 0.05em;
         }
         .toggle-btn {
           background: none;
@@ -206,10 +248,15 @@ export function Sidebar({ currentPage, onNavigate, collapsed, onToggle }: Sideba
           display: flex;
           align-items: center;
           justify-content: center;
+          transition: all 0.2s;
         }
         .toggle-btn:hover {
           background: var(--bg-hover);
-          color: var(--text);
+          color: var(--mystical-gold, #C9A227);
+        }
+        .mystical-focus:focus-visible {
+          outline: none;
+          box-shadow: 0 0 0 2px var(--bg-dark), 0 0 0 4px var(--mystical-glow, #4A90D9), var(--glow-blue, 0 0 20px rgba(74, 144, 217, 0.3));
         }
         .chevron {
           width: 20px;
@@ -230,10 +277,11 @@ export function Sidebar({ currentPage, onNavigate, collapsed, onToggle }: Sideba
         .nav-section-title {
           font-size: 0.6875rem;
           text-transform: uppercase;
-          color: var(--text-dim);
-          letter-spacing: 0.05em;
+          color: var(--mystical-gold, #C9A227);
+          letter-spacing: 0.1em;
           padding: 0 0.75rem;
           margin-bottom: 0.5rem;
+          opacity: 0.7;
         }
         .nav-item {
           display: flex;
@@ -251,12 +299,19 @@ export function Sidebar({ currentPage, onNavigate, collapsed, onToggle }: Sideba
           text-align: left;
         }
         .nav-item:hover {
-          background: var(--primary-light);
+          background: rgba(74, 144, 217, 0.1);
           color: var(--text);
+          box-shadow: inset 0 0 0 1px rgba(74, 144, 217, 0.2);
         }
         .nav-item.active {
-          background: var(--primary);
-          color: white;
+          background: linear-gradient(135deg, var(--mystical-blue-royal, #1E3A5F) 0%, var(--mystical-purple-deep, #2D2438) 100%);
+          color: var(--mystical-gold, #C9A227);
+          border: 1px solid var(--border-gold, rgba(201, 162, 39, 0.3));
+          box-shadow: var(--glow-blue, 0 0 20px rgba(74, 144, 217, 0.3));
+        }
+        .nav-item:focus-visible {
+          outline: none;
+          box-shadow: 0 0 0 2px var(--bg-dark), 0 0 0 4px var(--mystical-glow, #4A90D9);
         }
         .nav-icon {
           width: 20px;
@@ -272,7 +327,8 @@ export function Sidebar({ currentPage, onNavigate, collapsed, onToggle }: Sideba
         }
         .sidebar-footer {
           padding: 1rem;
-          border-top: 1px solid var(--border);
+          border-top: 1px solid var(--border-gold, rgba(201, 162, 39, 0.2));
+          background: rgba(0, 0, 0, 0.2);
         }
         .user-info {
           display: flex;
@@ -284,7 +340,7 @@ export function Sidebar({ currentPage, onNavigate, collapsed, onToggle }: Sideba
         .user-avatar {
           width: 36px;
           height: 36px;
-          background: var(--primary);
+          background: linear-gradient(135deg, var(--mystical-gold, #C9A227) 0%, var(--mystical-gold-dark, #8B7019) 100%);
           border-radius: 50%;
           display: flex;
           align-items: center;
@@ -292,6 +348,8 @@ export function Sidebar({ currentPage, onNavigate, collapsed, onToggle }: Sideba
           font-weight: 600;
           font-size: 0.875rem;
           flex-shrink: 0;
+          color: var(--mystical-blue-cosmic, #0A1628);
+          box-shadow: 0 0 10px rgba(201, 162, 39, 0.3);
         }
         .user-details {
           overflow: hidden;
@@ -305,8 +363,9 @@ export function Sidebar({ currentPage, onNavigate, collapsed, onToggle }: Sideba
         }
         .user-role {
           font-size: 0.75rem;
-          color: var(--text-muted);
+          color: var(--mystical-gold, #C9A227);
           text-transform: capitalize;
+          opacity: 0.8;
         }
         .logout-btn {
           color: var(--error);

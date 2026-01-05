@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <!-- Gold gradient -->
+    <linearGradient id="medallionGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E5C76B"/>
+      <stop offset="50%" style="stop-color:#C9A227"/>
+      <stop offset="100%" style="stop-color:#8B7019"/>
+    </linearGradient>
+    
+    <!-- Cosmic blue gradient -->
+    <radialGradient id="cosmicBg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#1E3A5F"/>
+      <stop offset="70%" style="stop-color:#0A1628"/>
+      <stop offset="100%" style="stop-color:#050A14"/>
+    </radialGradient>
+    
+    <!-- Glow filter -->
+    <filter id="medallionGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-color="#4A90D9" flood-opacity="0.3"/>
+      <feComposite in2="blur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="400" fill="url(#cosmicBg)"/>
+  
+  <!-- Corner flourishes -->
+  <g fill="none" stroke="url(#medallionGold)" stroke-width="2" opacity="0.8">
+    <!-- Top-left -->
+    <path d="M 10 40 Q 10 10, 40 10 M 20 10 L 10 10 L 10 20 M 30 20 Q 20 20, 20 30"/>
+    <!-- Top-right -->
+    <path d="M 390 40 Q 390 10, 360 10 M 380 10 L 390 10 L 390 20 M 370 20 Q 380 20, 380 30"/>
+    <!-- Bottom-left -->
+    <path d="M 10 360 Q 10 390, 40 390 M 20 390 L 10 390 L 10 380 M 30 380 Q 20 380, 20 370"/>
+    <!-- Bottom-right -->
+    <path d="M 390 360 Q 390 390, 360 390 M 380 390 L 390 390 L 390 380 M 370 380 Q 380 380, 380 370"/>
+  </g>
+  
+  <!-- Outer circle -->
+  <circle cx="200" cy="200" r="170" fill="none" stroke="url(#medallionGold)" stroke-width="3" opacity="0.6"/>
+  
+  <!-- Runic border ring -->
+  <circle cx="200" cy="200" r="155" fill="none" stroke="#4A90D9" stroke-width="20" opacity="0.3"/>
+  
+  <!-- Runic text simulation (decorative marks) -->
+  <g fill="#4A90D9" opacity="0.5">
+    <!-- Top runes -->
+    <rect x="195" y="35" width="10" height="3" rx="1"/>
+    <rect x="165" y="40" width="8" height="3" rx="1"/>
+    <rect x="227" y="40" width="8" height="3" rx="1"/>
+    <rect x="140" y="50" width="6" height="3" rx="1"/>
+    <rect x="254" y="50" width="6" height="3" rx="1"/>
+    
+    <!-- Bottom runes -->
+    <rect x="195" y="362" width="10" height="3" rx="1"/>
+    <rect x="165" y="357" width="8" height="3" rx="1"/>
+    <rect x="227" y="357" width="8" height="3" rx="1"/>
+    
+    <!-- Left runes -->
+    <rect x="35" y="195" width="3" height="10" rx="1"/>
+    <rect x="40" y="165" width="3" height="8" rx="1"/>
+    <rect x="40" y="227" width="3" height="8" rx="1"/>
+    
+    <!-- Right runes -->
+    <rect x="362" y="195" width="3" height="10" rx="1"/>
+    <rect x="357" y="165" width="3" height="8" rx="1"/>
+    <rect x="357" y="227" width="3" height="8" rx="1"/>
+  </g>
+  
+  <!-- Inner decorative circle -->
+  <circle cx="200" cy="200" r="130" fill="none" stroke="url(#medallionGold)" stroke-width="1.5" opacity="0.5"/>
+  
+  <!-- Inner glow circle -->
+  <circle cx="200" cy="200" r="100" fill="#1E3A5F" opacity="0.4" filter="url(#medallionGlow)"/>
+  
+  <!-- Central triskelion -->
+  <g transform="translate(200, 200)" filter="url(#medallionGlow)">
+    <!-- First spiral arm -->
+    <path d="M 0 0 
+             Q 16 -8, 24 -24 
+             Q 28 -40, 16 -48 
+             Q 0 -56, -16 -44 
+             Q -28 -32, -20 -16 
+             Q -12 0, 0 0" 
+          fill="none" 
+          stroke="url(#medallionGold)" 
+          stroke-width="6" 
+          stroke-linecap="round"/>
+    
+    <!-- Second spiral arm (rotated 120°) -->
+    <path d="M 0 0 
+             Q 16 -8, 24 -24 
+             Q 28 -40, 16 -48 
+             Q 0 -56, -16 -44 
+             Q -28 -32, -20 -16 
+             Q -12 0, 0 0" 
+          fill="none" 
+          stroke="url(#medallionGold)" 
+          stroke-width="6" 
+          stroke-linecap="round"
+          transform="rotate(120)"/>
+    
+    <!-- Third spiral arm (rotated 240°) -->
+    <path d="M 0 0 
+             Q 16 -8, 24 -24 
+             Q 28 -40, 16 -48 
+             Q 0 -56, -16 -44 
+             Q -28 -32, -20 -16 
+             Q -12 0, 0 0" 
+          fill="none" 
+          stroke="url(#medallionGold)" 
+          stroke-width="6" 
+          stroke-linecap="round"
+          transform="rotate(240)"/>
+    
+    <!-- Center dot -->
+    <circle cx="0" cy="0" r="5" fill="#C9A227"/>
+  </g>
+  
+  <!-- Decorative dots around center -->
+  <g fill="#C9A227" opacity="0.4">
+    <circle cx="200" cy="120" r="3"/>
+    <circle cx="200" cy="280" r="3"/>
+    <circle cx="120" cy="200" r="3"/>
+    <circle cx="280" cy="200" r="3"/>
+    <circle cx="143" cy="143" r="2"/>
+    <circle cx="257" cy="143" r="2"/>
+    <circle cx="143" cy="257" r="2"/>
+    <circle cx="257" cy="257" r="2"/>
+  </g>
+</svg>

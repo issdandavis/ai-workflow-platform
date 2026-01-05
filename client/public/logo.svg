@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <!-- Gold gradient for the spiral -->
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E5C76B"/>
+      <stop offset="50%" style="stop-color:#C9A227"/>
+      <stop offset="100%" style="stop-color:#8B7019"/>
+    </linearGradient>
+    
+    <!-- Blue glow filter -->
+    <filter id="blueGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feFlood flood-color="#4A90D9" flood-opacity="0.6"/>
+      <feComposite in2="blur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Gold glow filter -->
+    <filter id="goldGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feFlood flood-color="#C9A227" flood-opacity="0.4"/>
+      <feComposite in2="blur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle with cosmic blue -->
+  <circle cx="50" cy="50" r="48" fill="#0A1628"/>
+  <circle cx="50" cy="50" r="46" fill="none" stroke="#1E3A5F" stroke-width="2"/>
+  
+  <!-- Inner glow circle -->
+  <circle cx="50" cy="50" r="40" fill="url(#cosmicGradient)" opacity="0.3">
+    <animate attributeName="opacity" values="0.2;0.4;0.2" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Triskelion (Triple Spiral) -->
+  <g transform="translate(50, 50)" filter="url(#goldGlow)">
+    <!-- First spiral arm -->
+    <path d="M 0 0 
+             Q 8 -4, 12 -12 
+             Q 14 -20, 8 -24 
+             Q 0 -28, -8 -22 
+             Q -14 -16, -10 -8 
+             Q -6 0, 0 0" 
+          fill="none" 
+          stroke="url(#goldGradient)" 
+          stroke-width="4" 
+          stroke-linecap="round"/>
+    
+    <!-- Second spiral arm (rotated 120°) -->
+    <path d="M 0 0 
+             Q 8 -4, 12 -12 
+             Q 14 -20, 8 -24 
+             Q 0 -28, -8 -22 
+             Q -14 -16, -10 -8 
+             Q -6 0, 0 0" 
+          fill="none" 
+          stroke="url(#goldGradient)" 
+          stroke-width="4" 
+          stroke-linecap="round"
+          transform="rotate(120)"/>
+    
+    <!-- Third spiral arm (rotated 240°) -->
+    <path d="M 0 0 
+             Q 8 -4, 12 -12 
+             Q 14 -20, 8 -24 
+             Q 0 -28, -8 -22 
+             Q -14 -16, -10 -8 
+             Q -6 0, 0 0" 
+          fill="none" 
+          stroke="url(#goldGradient)" 
+          stroke-width="4" 
+          stroke-linecap="round"
+          transform="rotate(240)"/>
+    
+    <!-- Center dot -->
+    <circle cx="0" cy="0" r="3" fill="#C9A227"/>
+  </g>
+  
+  <!-- Outer decorative ring -->
+  <circle cx="50" cy="50" r="44" fill="none" stroke="#C9A227" stroke-width="1" opacity="0.5"/>
+  
+  <!-- Subtle runic marks around the edge -->
+  <g opacity="0.3" fill="#4A90D9">
+    <rect x="49" y="4" width="2" height="4" rx="1"/>
+    <rect x="49" y="92" width="2" height="4" rx="1"/>
+    <rect x="4" y="49" width="4" height="2" rx="1"/>
+    <rect x="92" y="49" width="4" height="2" rx="1"/>
+  </g>
+</svg>

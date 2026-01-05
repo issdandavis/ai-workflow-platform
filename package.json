@@ -8,6 +8,15 @@
     "build": "tsc && vite build",
     "start": "node dist/server/index.js",
     "test": "vitest",
+    "test:e2e": "playwright test --project=chromium",
+    "test:e2e:all": "playwright test",
+    "test:ui": "playwright test tests/ui/",
+    "test:visual": "playwright test tests/ui/ --update-snapshots",
+    "test:load": "tsx tests/load/load-test.ts",
+    "test:stress": "tsx tests/load/stress-test.ts",
+    "test:session": "tsx tests/load/session-test.ts",
+    "test:all-load": "tsx tests/load/load-test.ts && tsx tests/load/stress-test.ts && tsx tests/load/session-test.ts",
+    "generate:endpoints": "tsx script/generate-endpoints.ts",
     "check": "tsc --noEmit",
     "db:push": "drizzle-kit push"
   },
@@ -48,6 +57,8 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
+    "@playwright/test": "^1.57.0",
     "@types/bcrypt": "^5.0.2",
     "@types/better-sqlite3": "^7.6.12",
     "@types/connect-pg-simple": "^7.0.3",
@@ -60,6 +71,7 @@
     "@types/pg": "^8.11.10",
     "@vitejs/plugin-react": "^4.3.4",
     "drizzle-kit": "^0.30.1",
+    "fast-check": "^4.5.3",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vite": "^6.0.7",
