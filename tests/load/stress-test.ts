@@ -7,7 +7,8 @@
  * Run with: npx tsx tests/load/stress-test.ts
  */
 
-const API_BASE = process.env.API_URL || 'http://localhost:5000';
+export const STRESS_TEST_API_BASE = process.env.API_URL || 'http://localhost:5000';
+const API_BASE = STRESS_TEST_API_BASE;
 
 interface StressResult {
   concurrency: number;

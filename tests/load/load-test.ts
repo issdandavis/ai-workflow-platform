@@ -9,7 +9,8 @@
  * Run with: npx tsx tests/load/load-test.ts
  */
 
-const API_BASE = process.env.API_URL || 'http://localhost:5000';
+export const LOAD_TEST_API_BASE = process.env.API_URL || 'http://localhost:5000';
+const API_BASE = LOAD_TEST_API_BASE;
 const CONCURRENT_USERS = 50;
 const TEST_TIMEOUT = 60000; // 60 seconds
 

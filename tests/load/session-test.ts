@@ -10,7 +10,8 @@
  * Run with: npx tsx tests/load/session-test.ts
  */
 
-const API_BASE = process.env.API_URL || 'http://localhost:5000';
+export const SESSION_TEST_API_BASE = process.env.API_URL || 'http://localhost:5000';
+const API_BASE = SESSION_TEST_API_BASE;
 const CONCURRENT_SESSIONS = 50;
 
 interface SessionTestResult {
