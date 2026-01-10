@@ -4,6 +4,7 @@
 
 import React, { useState, useEffect } from "react";
 import { dashboard, ai, audit } from "../lib/api";
+import { HarmonicSecurityStatus } from "../components/features/HarmonicSecurityStatus";
 import type { NavigateFn } from "../App";
 
 interface Stats {
@@ -111,6 +112,11 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       </div>
 
       <div className="dashboard-grid">
+        {/* Harmonic Security Status */}
+        <div className="security-section">
+          <HarmonicSecurityStatus className="security-widget" />
+        </div>
+
         {/* AI Providers */}
         <div className="card">
           <div className="card-header">
@@ -265,6 +271,14 @@ export function Dashboard({ onNavigate }: DashboardProps) {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
           gap: 1.5rem;
+        }
+        .security-section {
+          grid-column: 1 / -1; /* Full width */
+          margin-bottom: 1rem;
+        }
+        .security-widget {
+          max-width: 600px;
+          margin: 0 auto;
         }
         .providers-list, .activity-list {
           display: flex;

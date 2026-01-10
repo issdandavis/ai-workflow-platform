@@ -14,3 +14,7 @@ Thumbs.db
 *.db
 coverage
 .nyc_output
+
+# Large binary files - use GitHub Releases instead
+*.zip
+ai-workflow-platform-*.zip

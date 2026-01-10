@@ -1,0 +1,59 @@
+{
+  "name": "harmonic-swarm-coordination",
+  "version": "1.0.0",
+  "description": "TypeScript library for multi-agent coordination using harmonic ratio algorithms",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "prepublishOnly": "npm run typecheck && npm run test && npm run build",
+    "dev": "tsx watch examples/satellite-demo.ts",
+    "demo:satellite": "tsx examples/satellite-demo.ts",
+    "demo:drone": "tsx examples/drone-demo.ts",
+    "benchmark": "tsx benchmarks/performance-test.ts",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write src"
+  },
+  "keywords": [
+    "swarm-coordination",
+    "harmonic-ratios",
+    "multi-agent",
+    "coordination-algorithms",
+    "typescript"
+  ],
+  "author": "Spiralverse Technologies",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/three": "^0.160.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0",
+    "@vitest/coverage-v8": "^1.0.0",
+    "eslint": "^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "prettier": "^3.0.0",
+    "rimraf": "^5.0.0"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  }
+}

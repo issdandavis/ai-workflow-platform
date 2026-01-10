@@ -133,6 +133,41 @@ export async function registerRoutes(
     }
   });
 
+  // ===== HARMONIC SECURITY STATUS ENDPOINT =====
+  
+  app.get("/api/security/harmonic-status", requireAuth, apiLimiter, async (req: Request, res: Response) => {
+    try {
+      const { runId } = req.query;
+      
+      // Get SCBE service telemetry from orchestrator
+      const telemetry = orchestratorQueue.getHarmonicTelemetry();
+      
+      // Calculate phase window for current time
+      const now = Date.now();
+      const phaseWindow: [number, number] = [
+        now - (telemetry.tau_phase * 1000 / 2),
+        now + (telemetry.tau_phase * 1000 / 2)
+      ];
+      
+      res.json({
+        dimension: telemetry.config.d,
+        harmonicValue: telemetry.H,
+        iterations: Math.floor(telemetry.config.N_0 * Math.pow(telemetry.H, 1/3)),
+        entropy: Math.random() * 0.3 + 0.7, // Simulated entropy for demo
+        phaseWindow,
+        profile: telemetry.config.profile,
+        activeFailures: telemetry.activeFailures,
+        uptime: telemetry.uptime
+      });
+    } catch (error) {
+      console.error("Failed to get harmonic security status:", error);
+      res.status(500).json({ 
+        error: "Failed to retrieve harmonic security status",
+        message: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
   // ===== FIGMA DESIGN PREVIEW ROUTE =====
 
   app.post("/api/figma/screenshot", apiLimiter, async (req: Request, res: Response) => {
