@@ -17,6 +17,8 @@ import { dispatchEvent } from "./zapierService";
 import { SCBEAethermoreService, type HarmonicContext, type SCBEConfig } from "./scbeAethermoore";
 import { scbeProcessor, type SCBEEnvelope, type VerificationResult } from "./scbeEnvelope";
 import { scbeMetrics } from "./scbeMetrics";
+import { SCBEProductionSecurity, AWSKMSProvider, RedisReplayCache } from "./scbeProductionSecurity";
+import { scbeMonitoring } from "./scbeProductionMonitoring";
 import type { InsertDecisionTrace } from "@shared/schema";
 
 // Security configuration constants
@@ -82,6 +84,7 @@ class OrchestratorQueue extends EventEmitter {
   private stepCounters: Map<string, number> = new Map();
   private pendingApprovalResolvers: Map<string, { resolve: () => void; reject: (reason: string) => void }> = new Map();
   private scbeService: SCBEAethermoreService;
+  private productionSecurity: SCBEProductionSecurity;
   
   // Performance optimizations
   private harmonicContextCache: Map<string, { context: HarmonicContext; timestamp: number }> = new Map();
@@ -99,6 +102,22 @@ class OrchestratorQueue extends EventEmitter {
     // Initialize SCBE-AETHERMOORE harmonic security service
     this.scbeService = new SCBEAethermoreService(SECURITY_CONFIG);
     
+    // Initialize production security with KMS and Redis
+    const kms = new AWSKMSProvider(process.env.SCBE_KMS_KEY_ID || 'dev-key');
+    const replayCache = new RedisReplayCache();
+    
+    this.productionSecurity = new SCBEProductionSecurity(
+      {
+        kmsKeyId: process.env.SCBE_KMS_KEY_ID || 'dev-key',
+        environment: (process.env.SCBE_ENVIRONMENT as any) || 'dev',
+        nonceCounterLimit: parseInt(process.env.SCBE_NONCE_COUNTER_LIMIT || '4294967295'),
+        replayWindowSeconds: parseInt(process.env.SCBE_REPLAY_WINDOW_SECONDS || '300'),
+        maxClockSkewSeconds: parseInt(process.env.SCBE_MAX_CLOCK_SKEW_SECONDS || '120')
+      },
+      kms,
+      replayCache
+    );
+    
     // Set up security event monitoring
     this.scbeService.on('encrypt', (data) => {
       this.emitSecurityEvent('harmonic_encryption', {
@@ -106,6 +125,11 @@ class OrchestratorQueue extends EventEmitter {
         harmonicValue: data.H,
         iterations: data.N_iter,
         entropy: data.contextEntropy
+      });
+      
+      // Record production metrics
+      scbeMonitoring.recordEnvelopeCreateTiming(data.duration || 0, {
+        provider: data.provider || 'unknown'
       });
     });
     
@@ -518,13 +542,18 @@ class OrchestratorQueue extends EventEmitter {
       message: `Calling ${run.provider} with model ${run.model} (with retry/fallback)...`,
     });
 
-    // Create SCBE envelope for secure provider communication
-    let envelope: SCBEEnvelope;
+    // Create SCBE envelope for secure provider communication (Production)
+    let envelope: any;
+    let envelopeMetrics: { createTime: number };
+    
     try {
-      envelope = await this.createSCBEEnvelope(task, run.provider, task.goal);
+      const result = await this.createSCBEEnvelopeProduction(task, run.provider, task.goal);
+      envelope = result.envelope;
+      envelopeMetrics = result.metrics;
+      
       this.emit("log", task.runId, {
         type: "info",
-        message: `Created SCBE envelope with intent ${envelope.intent.primary} (harmonic ${envelope.intent.harmonic})`,
+        message: `Created production SCBE envelope (${envelopeMetrics.createTime.toFixed(2)}ms)`,
       });
     } catch (error) {
       this.emit("log", task.runId, {
@@ -554,12 +583,14 @@ class OrchestratorQueue extends EventEmitter {
             message: `Provider failed, falling back to ${nextProvider}. Error: ${error}`,
           });
           
-          // Create new envelope for fallback provider
+          // Create new envelope for fallback provider (Production)
           try {
-            envelope = await this.createSCBEEnvelope(task, nextProvider, task.goal);
+            const result = await this.createSCBEEnvelopeProduction(task, nextProvider, task.goal);
+            envelope = result.envelope;
+            
             this.emit("log", task.runId, {
               type: "info",
-              message: `Created fallback SCBE envelope for ${nextProvider}`,
+              message: `Created fallback SCBE envelope for ${nextProvider} (${result.metrics.createTime.toFixed(2)}ms)`,
             });
           } catch (envelopeError) {
             this.emit("log", task.runId, {
@@ -602,14 +633,16 @@ class OrchestratorQueue extends EventEmitter {
       throw new Error(response.error || "Provider call failed");
     }
 
-    // Verify SCBE envelope if provider returned one
+    // Verify SCBE envelope if provider returned one (Production)
     if (response.envelope) {
       try {
-        const verificationResult = await this.verifySCBEEnvelope(response.envelope);
+        const sessionId = `${task.orgId}-${task.runId}`;
+        const verificationResult = await this.verifySCBEEnvelopeProduction(response.envelope, sessionId);
+        
         if (!verificationResult.success) {
           this.emit("log", task.runId, {
             type: "warning",
-            message: `SCBE envelope verification failed at stage ${verificationResult.stage}: ${verificationResult.error}`,
+            message: `SCBE envelope verification failed (${verificationResult.metrics.verifyTime.toFixed(2)}ms)`,
           });
           
           // Log verification failure but don't fail the task (graceful degradation)
@@ -617,13 +650,13 @@ class OrchestratorQueue extends EventEmitter {
             task.runId,
             "security_validation",
             `SCBE envelope verification failed`,
-            `Verification failed at stage ${verificationResult.stage}: ${verificationResult.error || 'Unknown error'}`,
-            { confidence: 0.6, contextUsed: { stage: verificationResult.stage, metrics: verificationResult.metrics } }
+            `Production envelope verification failed after ${verificationResult.metrics.verifyTime.toFixed(2)}ms`,
+            { confidence: 0.6, contextUsed: { verifyTime: verificationResult.metrics.verifyTime } }
           );
         } else {
           this.emit("log", task.runId, {
             type: "info",
-            message: `SCBE envelope verified successfully`,
+            message: `SCBE envelope verified successfully (${verificationResult.metrics.verifyTime.toFixed(2)}ms)`,
           });
         }
       } catch (verificationError) {
@@ -734,85 +767,123 @@ class OrchestratorQueue extends EventEmitter {
   // ===== SCBE-AETHERMOORE INTEGRATION METHODS =====
 
   /**
-   * Create SCBE envelope for secure AI provider communication
-   * @param task - The agent task being executed
-   * @param provider - Target AI provider
-   * @param content - Request content to encrypt
-   * @returns SCBE envelope with encrypted payload
+   * Create SCBE envelope for secure AI provider communication (Production)
+   * Uses production-grade security with KMS and comprehensive monitoring
    */
-  private async createSCBEEnvelope(
+  private async createSCBEEnvelopeProduction(
     task: AgentTask, 
     provider: string, 
     content: string
-  ): Promise<SCBEEnvelope> {
-    const now = Math.floor(Date.now() / 1000); // seconds
-    const harmonicContext = this.createHarmonicContext(task.runId, task.orgId);
+  ): Promise<{ envelope: any; metrics: { createTime: number } }> {
+    const startTime = performance.now();
     
-    // Create envelope context
-    const ctx = {
-      ts: now,
-      device_id: `orchestrator-${process.pid}`,
-      threat_level: Math.min(10, Math.max(1, Math.floor(this.activeCount / this.concurrency * 10))),
-      entropy: harmonicContext.entropy,
-      server_load: harmonicContext.load,
-      stability: harmonicContext.stability
-    };
-    
-    // Map task goal to intent vocabulary
-    const intent = this.mapTaskToIntent(task.goal, provider);
-    
-    // Create trajectory for phase synchronization
-    const trajectory = {
-      epoch: now - (now % 3600), // Start of current hour
-      period_s: 3600, // 1-hour phase period
-      slot_id: `${task.orgId}-${Math.floor(now / 3600)}`,
-      waypoint: Math.floor((now % 3600) / 900) // 15-minute waypoints
-    };
-    
-    // Additional authenticated data
-    const aad = {
-      route_hint: provider as any,
-      run_id: task.runId,
-      step_no: this.stepCounters.get(task.runId) || 0
-    };
-    
-    // Encrypt the content using SCBE-AETHERMOORE
-    const sharedSecret = await this.getOrCreateRunSecret(task.runId);
-    const intentFingerprint = Buffer.from(`${intent.primary}_${intent.harmonic}_${provider}`);
-    
-    const encryptionResult = await this.scbeService.encrypt(
-      Buffer.from(content),
-      harmonicContext,
-      intentFingerprint,
-      sharedSecret
-    );
-    
-    if (!encryptionResult.success) {
-      throw new Error("SCBE encryption failed");
+    try {
+      // Use production security implementation
+      const envelope = await this.productionSecurity.encryptEnvelope(
+        Buffer.from(content),
+        `${task.orgId}-${task.runId}`, // session ID
+        provider,
+        'gpt-4', // model - would be dynamic in production
+        this.mapGoalToIntent(task.goal),
+        task.runId,
+        'application/json'
+      );
+      
+      const createTime = performance.now() - startTime;
+      
+      // Record production metrics
+      scbeMonitoring.recordEnvelopeCreateTiming(createTime, { provider });
+      
+      return {
+        envelope: {
+          ciphertext: envelope.ciphertext,
+          aad: envelope.aad,
+          nonce: envelope.nonce,
+          keyId: envelope.keyId
+        },
+        metrics: { createTime }
+      };
+      
+    } catch (error) {
+      const createTime = performance.now() - startTime;
+      scbeMonitoring.recordEnvelopeCreateTiming(createTime, { provider, error: 'true' });
+      
+      // Record failure for monitoring
+      scbeMonitoring.recordFailToNoise(
+        error instanceof Error ? error.message : 'unknown_error',
+        provider
+      );
+      
+      throw error;
     }
+  }
+  
+  /**
+   * Map task goal to SCBE intent (simplified for production)
+   */
+  private mapGoalToIntent(goal: string): string {
+    const goalLower = goal.toLowerCase();
     
-    // Create envelope with crypto parameters
-    const envelope = scbeProcessor.createEnvelope(
-      ctx,
-      intent,
-      trajectory,
-      aad,
-      {
-        kem: 'ML-KEM-768',
-        sig: 'ML-DSA-65',
-        salt_q_b64: Buffer.from(encryptionResult.salt || '').toString('base64'),
-        cipher_b64: encryptionResult.ciphertext || ''
-      },
-      {
-        d: SECURITY_CONFIG.d || 4,
-        R: SECURITY_CONFIG.R || 1.618
+    if (goalLower.includes('read') || goalLower.includes('analyze')) {
+      return 'sil\'kor'; // Foundation
+    } else if (goalLower.includes('search') || goalLower.includes('find')) {
+      return 'nav\'een'; // Journey
+    } else if (goalLower.includes('write') || goalLower.includes('create')) {
+      return 'thel\'vori'; // Transformation
+    } else {
+      return 'keth\'mar'; // Boundary
+    }
+  }
+  
+  /**
+   * Verify SCBE envelope from provider response (Production)
+   */
+  private async verifySCBEEnvelopeProduction(envelope: any, sessionId: string): Promise<{
+    success: boolean;
+    plaintext?: Buffer;
+    metrics: { verifyTime: number };
+  }> {
+    const startTime = performance.now();
+    
+    try {
+      const plaintext = await this.productionSecurity.decryptEnvelope(
+        envelope.ciphertext,
+        envelope.aad,
+        envelope.nonce,
+        sessionId
+      );
+      
+      const verifyTime = performance.now() - startTime;
+      scbeMonitoring.recordEnvelopeVerifyTiming(verifyTime, {
+        provider: envelope.aad?.provider || 'unknown'
+      });
+      
+      return {
+        success: true,
+        plaintext,
+        metrics: { verifyTime }
+      };
+      
+    } catch (error) {
+      const verifyTime = performance.now() - startTime;
+      scbeMonitoring.recordEnvelopeVerifyTiming(verifyTime, {
+        provider: envelope.aad?.provider || 'unknown',
+        error: 'true'
+      });
+      
+      // Record security event
+      if (error instanceof Error && error.message.includes('verification failed')) {
+        scbeMonitoring.recordGCMFailure(
+          envelope.aad?.provider || 'unknown',
+          'verification_failed'
+        );
       }
-    );
-    
-    // Sign envelope with orchestrator key
-    envelope.sig.orchestrator_sig_b64 = await this.signEnvelope(envelope);
-    
-    return envelope;
+      
+      return {
+        success: false,
+        metrics: { verifyTime }
+      };
+    }
   }
   
   /**
