@@ -259,3 +259,5 @@ async function runSessionTests(): Promise<void> {
 }
 
 runSessionTests();
+
+export {};
